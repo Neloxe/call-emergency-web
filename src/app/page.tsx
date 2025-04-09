@@ -59,7 +59,7 @@ export default async function Home({ searchParams }: PropsType) {
         <PredictionsOverview
           data={extract_prediction_reals_values(1)}
           className="col-span-12 xl:col-span-8"
-          title={"Prédiction sur l'heure"}
+          title={"Prédiction sur la journée"}
         />
         <Stats className="col-span-12 xl:col-span-4" />
 

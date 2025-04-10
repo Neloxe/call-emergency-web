@@ -3,14 +3,14 @@ import { cn } from "@/utils/utils";
 export type PropsType = {
   className?: string;
   title: string;
-  text: string;
+  body: React.ReactNode;
 };
 
-export function Text({ className, title, text }: PropsType) {
+export function Text({ className, title, body }: PropsType) {
   return (
     <div
       className={cn(
-        "h-full w-full rounded-[10px] bg-white px-7.5 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card",
+        "h-full w-full rounded-[10px] bg-white px-7.5 pt-7.5 pb-5 shadow-1 dark:bg-gray-dark dark:shadow-card",
         className
       )}
       style={{ width: "100%", height: "100%" }}
@@ -21,7 +21,7 @@ export function Text({ className, title, text }: PropsType) {
         </h2>
       </div>
 
-      <div className="place-items-left grid pb-4 pt-4">{text}</div>
+      <div className="place-items-left grid pb-4 pt-4">{body}</div>
     </div>
   );
 }

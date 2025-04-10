@@ -1,51 +1,41 @@
-// import fs from "fs";
-// import path from "path";
-// import csvParser from "csv-parser";
-// import { NextApiRequest, NextApiResponse } from "next";
+import fs from "fs";
+import path from "path";
+import csvParser from "csv-parser";
+import { NextApiRequest, NextApiResponse } from "next";
 
-// export default function handler(req: NextApiRequest, res: NextApiResponse) {
-//   const { selectedModel } = req.query;
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { selectedModel, n_days } = req.query;
 
-//   if (!selectedModel || typeof selectedModel !== "string") {
-//     return res.status(400).json({ error: "Missing or invalid 'selectedModel' parameter" });
-//   }
+  if (!selectedModel || typeof selectedModel !== "string") {
+    return res.status(400).json({ error: "Missing or invalid 'selectedModel' parameter" });
+  }
 
-//   const predictions: number[][] = [];
-//   const reals: number[][] = [];
+  const days = parseInt(n_days as string, 10) || 7;
 
-//   const filePaths = [
-//     { path: path.join(process.cwd(), `data/pred_${selectedModel}.csv`), target: predictions },
-//     { path: path.join(process.cwd(), `data/test_${selectedModel}.csv`), target: reals },
-//   ];
+  let fileName = "pred-week.csv";
+  if (selectedModel === "Merlain-2-weeks") {
+    fileName = "pred-two-weeks.csv";
+  } else if (selectedModel === "Merlain-month") {
+    fileName = "pred-month.csv";
+  }
 
-//   let completed = 0;
+  const filePath = path.join(process.cwd(), `data/${fileName}`);
+  const predictions: number[][] = [];
 
-//   filePaths.forEach(({ path, target }) => {
-//     let isFirstRow = true;
-
-//     fs.createReadStream(path)
-//       .pipe(csvParser({ headers: false }))
-//       .on("data", (row) => {
-//         if (isFirstRow) {
-//           isFirstRow = false;
-//           return;
-//         }
-//         const values = Object.values(row).map((value) => Number(value));
-//         target.push(values);
-//       })
-//       .on("end", () => {
-//         completed++;
-//         if (completed === filePaths.length) {
-//           const flatPredictions = predictions.flat();
-//           const flatReals = reals.flat();
-//           res.status(200).json({
-//             predictions: flatPredictions,
-//             reals: flatReals,
-//           });
-//         }
-//       })
-//       .on("error", (error) => {
-//         res.status(500).json({ error: error.message });
-//       });
-//   });
-// }
+  fs.createReadStream(filePath)
+    .pipe(csvParser({ headers: false }))
+    .on("data", (row) => {
+      const values = Object.values(row).map((value) => Number(value));
+      predictions.push(values);
+    })
+    .on("end", () => {
+      const flatPredictions = predictions.flat();
+      res.status(200).json({
+        predictions: flatPredictions.slice(-days * 24),
+        reals: flatPredictions.slice(-days * 24), // Adjust if you have real data
+      });
+    })
+    .on("error", (error) => {
+      res.status(500).json({ error: error.message });
+    });
+}

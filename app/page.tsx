@@ -4,10 +4,11 @@ import { PredictionsOverview } from "@/components/predictionsOverview";
 import { Text } from "@/components/text";
 import { getData } from "@/utils/get-data";
 import { useModel } from "@/components/model-context";
+import { Metadata } from "next";
 
 export default function Home() {
   const { selectedModel } = useModel();
-  const data = getData(selectedModel, 10);
+  // const data = getData(10, selectedModel);
   // const data_week = getData(selectedModel, 7);
   // const data_day = getData(selectedModel, 1);
 

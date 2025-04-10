@@ -1,68 +1,15 @@
-import fs from "fs";
-import csvParser from "csv-parser";
-import { useEffect, useState } from "react";
-
-export function getData(
-  selectedModel: string,
+export async function getData(
   n_days: number,
+  selectedModel: string,
 ): Promise<{ predictions: number[]; reals: number[] }> {
-  return new Promise((resolve, reject) => {
-    const predictions: number[][] = [];
-    const reals: number[][] = [];
+  const baseUrl = typeof window === "undefined" ? "http://localhost:3000" : "";
+  const response = await fetch(
+    `${baseUrl}/api/read-data?selectedModel=${encodeURIComponent(selectedModel)}&n_days=${n_days}`
+  );
 
-    const [name, setName] = useState<string>("");
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
 
-    useEffect(() => {
-      switch (selectedModel) {
-        case "Merlain-week":
-          setName("week");
-          break;
-        case "Merlain-2-weeks":
-          setName("two-weeks");
-          break;
-        case "Merlain-month":
-          setName("month");
-          break;
-        default:
-          setName("week");
-          break;
-      }
-    }, [selectedModel]);
-
-    const filePaths = [
-      { path: `./src/data/pred-${name}.csv`, target: predictions },
-      { path: `./src/data/pred-${name}.csv`, target: reals },
-    ];
-
-    let completed = 0;
-
-    filePaths.forEach(({ path, target }) => {
-      let isFirstRow = true;
-
-      fs.createReadStream(path)
-        .pipe(csvParser({ headers: false }))
-        .on("data", (row) => {
-          if (isFirstRow) {
-            isFirstRow = false;
-            return;
-          }
-          const values = Object.values(row).map((value) => Number(value));
-          target.push(values);
-        })
-        .on("end", () => {
-          completed++;
-          if (completed === filePaths.length) {
-            const flatPredictions = predictions.flat();
-            const flatReals = reals.flat();
-            resolve({
-              predictions: flatPredictions.slice(-n_days * 24),
-              reals: flatReals.slice(-n_days * 24),
-            });
-          }
-        })
-        .on("error", (error) => {
-          reject(error);
-        });
-    });
-  });
+  return response.json();
 }

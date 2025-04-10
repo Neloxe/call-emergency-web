@@ -1,4 +1,4 @@
-import { HomeIcon } from "@/assets/icons";
+import { DownloadIcon,TrendingUpIcon, TrashIcon, FourCircle } from "@/assets/icons";
 
 export const NAV_DATA = [
   {
@@ -7,13 +7,13 @@ export const NAV_DATA = [
       {
         title: "Prédictions",
         url: "/",
-        icon: HomeIcon,
+        icon: TrendingUpIcon,
         items: [],
       },
       {
         title: "Ajouts",
         url: "/add",
-        icon: HomeIcon,
+        icon: DownloadIcon,
         items: [],
       },
     ],
@@ -24,13 +24,13 @@ export const NAV_DATA = [
       {
         title: "Suppression",
         url: "/delete",
-        icon: HomeIcon,
+        icon: TrashIcon,
         items: [],
       },
       {
         title: "Informations",
         url: "/info",
-        icon: HomeIcon,
+        icon: FourCircle,
         items: [],
       },
     ],

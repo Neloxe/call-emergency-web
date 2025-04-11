@@ -2,20 +2,17 @@ import { cn } from "@/utils/utils";
 import { PredictionsOverviewChart } from "@/components/predictionsOverviewChart";
 
 type PropsType = {
-  data: Promise<{
+  data: {
     predictions: number[];
     reals: number[];
-  }>;
+  };
   className?: string;
   title?: string;
 };
 
-export async function PredictionsOverview({
-  data,
-  className,
-  title,
-}: PropsType) {
-  const { predictions, reals } = await data;
+export function PredictionsOverview({ data, className, title }: PropsType) {
+  const { predictions, reals } = data;
+
   return (
     <div
       className={cn(

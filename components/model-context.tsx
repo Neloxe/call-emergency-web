@@ -10,7 +10,7 @@ type ModelContextType = {
 const ModelContext = createContext<ModelContextType | undefined>(undefined);
 
 export const ModelProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedModel, setSelectedModel] = useState<string>("Merlain-week");
+  const [selectedModel, setSelectedModel] = useState<string>("Merlain-Week");
 
   return (
     <ModelContext.Provider value={{ selectedModel, setSelectedModel }}>

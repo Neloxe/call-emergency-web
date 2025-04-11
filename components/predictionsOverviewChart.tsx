@@ -73,6 +73,23 @@ export function PredictionsOverviewChart({
       },
       fontFamily: "inherit",
     },
+    annotations: {
+      xaxis: [
+        {
+          x: new Date(currentDate).getTime(),
+          borderColor: "#FF0000", // Couleur rouge pour plus de visibilité
+          borderWidth: 2, // Épaisseur de la ligne
+          label: {
+            show: true,
+            text: "Présent",
+            style: {
+              color: "#fff",
+              background: "#775DD0",
+            },
+          },
+        },
+      ],
+    },
     responsive: [
       {
         breakpoint: 1024,
@@ -132,33 +149,29 @@ export function PredictionsOverviewChart({
             date.toISOString().split("T")[0] ===
             currentDate.toISOString().split("T")[0];
 
-          if (isToday) {
-            // Check if the time is the same as the current time
-            if (
-              date.getHours() === currentDate.getHours() &&
-              date.getMinutes() === currentDate.getMinutes()
-            ) {
-              return "Maintenant";
-            }
-            return "Aujourd'hui";
-          }
-
           // Format the date based on the range of dates
           if (allDates.length > 24 * 7) {
+            if (isToday) {
+              return "Aujourd'hui";
+            }
             return date.toISOString().split("T")[0];
           }
 
-          const hours = date.getHours().toString().padStart(2, "0");
-          return `${hours}:${date.getMinutes().toString().padStart(2, "0")} ${date.toLocaleDateString(
-            "fr-FR",
-            { day: "2-digit", month: "2-digit" },
-          )}`;
+          // If 00:00, show only the date
+          if (date.getHours() === 0 && date.getMinutes() === 0) {
+            return date.toISOString().split("T")[0];
+          } else {
+            return date.toLocaleTimeString("fr-FR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+          }
         },
         rotate: -45, // Rotation des étiquettes
         rotateAlways: true, // Forcer la rotation même si les étiquettes ne se chevauchent pas
         hideOverlappingLabels: false, // Ne pas masquer les étiquettes qui se chevauchent
       },
-      tickAmount: 10, // Nombre d'étiquettes à afficher
+      tickAmount: allDates.length > 167 ? 10 : 20,
       title: {
         text: allDates.length > 167 ? "Dates" : "Heures",
         style: {

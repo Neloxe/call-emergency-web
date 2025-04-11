@@ -1,74 +1,69 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
-import csvParser from "csv-parser";
+import path from "path";
+import { parse } from "csv-parse/sync";
 
-export async function GET(req: Request) {
-  // try {
-  //   const fakeData = {
-  //     predictions: Array(24).fill(0).map(() => Math.random() * 100),
-  //     reals: Array(24).fill(0).map(() => Math.random() * 100),
-  //   };
-
-  //   return NextResponse.json(fakeData);
-  // } catch (error) {
-  //   console.error("Unexpected error in API route:", error);
-  //   return NextResponse.json(
-  //     { error: "Internal Server Error" },
-  //     { status: 500 }
-  //   );
-  // }
-
+export async function GET(request: Request) {
   try {
-    const predictions: number[][] = [];
-    const reals: number[][] = [];
+    const { searchParams } = new URL(request.url);
+    const selectedModel = searchParams.get("selectedModel");
+    const nDays = Math.max(0, parseInt(searchParams.get("n_days") || "0", 10)); // Ensure nDays is non-negative
 
-    const filePaths = [
-      { path: `./data/pred_week.csv`, target: predictions },
-      { path: `./data/pred_week.csv`, target: reals },
-    ];
+    if (!selectedModel) {
+      return NextResponse.json(
+        { error: "Le paramètre 'selectedModel' est requis." },
+        { status: 400 }
+      );
+    }
 
-    // const filePaths = [
-    //   { path: `./src/data/predictions.csv`, target: predictions },
-    //   { path: `./src/data/reals.csv`, target: reals },
-    // ];
+    const predPath = path.join(process.cwd(), "data", `pred-${selectedModel}.csv`);
+    const realPath = path.join(process.cwd(), "data", "real.csv");
 
-    await Promise.all(
-      filePaths.map(({ path, target }) => {
-        return new Promise<void>((resolve, reject) => {
-          let isFirstRow = true;
+    if (!fs.existsSync(predPath)) {
+      return NextResponse.json(
+        { error: `Le fichier prédictions est introuvable : ${predPath}` },
+        { status: 404 }
+      );
+    }
 
-          fs.createReadStream(path)
-            .pipe(csvParser({ headers: false }))
-            .on("data", (row) => {
-              if (isFirstRow) {
-                isFirstRow = false;
-                return;
-              }
-              const values = Object.values(row).map((value) => Number(value));
-              target.push(values);
-            })
-            .on("end", resolve)
-            .on("error", (err) => {
-              console.error(`Error reading file ${path}:`, err);
-              reject(err);
-            });
-        });
-      })
-    );
+    if (!fs.existsSync(realPath)) {
+      return NextResponse.json(
+        { error: `Le fichier réel est introuvable : ${realPath}` },
+        { status: 404 }
+      );
+    }
 
-    const flatPredictions = predictions.flat();
-    const flatReals = reals.flat();
+    const predContent = fs.readFileSync(predPath, "utf-8");
+    const realContent = fs.readFileSync(realPath, "utf-8");
 
-    const fakeData = {
-      predictions: flatPredictions,
-      reals: flatReals,
-    };
+    const predRecords = parse(predContent, {
+      columns: true,
+      skip_empty_lines: true,
+    });
 
-    return NextResponse.json(fakeData);
+    const realRecords = parse(realContent, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
+    const maxPredDays = predRecords.length;
+    const maxRealDays = realRecords.length;
+
+    const validNDays = Math.min(nDays, maxPredDays, maxRealDays); // Ensure nDays does not exceed available records
+
+    const predictions = predRecords
+      .map((record: any) => Number(record.Predictions))
+      .slice(-validNDays);
+
+    const reals = realRecords
+      .map((record: any) => Number(record.Calls))
+      .slice(-validNDays);
+
+    return NextResponse.json({ predictions, reals });
   } catch (error) {
-    console.error("Unexpected error in API route:", error);
+    console.error("Erreur lors de la lecture des fichiers CSV :", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Impossible de lire les fichiers CSV." },
       { status: 500 }
     );
   }

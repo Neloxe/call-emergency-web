@@ -2,7 +2,6 @@
 
 //TODO:
 // - choisir une date
-// - superposer avec valeurs réelles (toggle)
 
 import type { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
@@ -87,6 +86,7 @@ export function PredictionsOverviewChart({ predictions, reals }: PropsType) {
       },
     },
     xaxis: {
+      categories: predictions.map((_, index) => predictions[index][""]),
       axisBorder: {
         show: false,
       },
@@ -99,6 +99,7 @@ export function PredictionsOverviewChart({ predictions, reals }: PropsType) {
           fontWeight: "normal",
           colors: "#333",
         },
+        formatter: (value) => value.toString(),
       },
       title: {
         text: predictions.length > 167 ? "Jours et heures" : "Heures",

@@ -17,7 +17,7 @@ export function PredictionsOverview({ data, className, title }: PropsType) {
     <div
       className={cn(
         "grid gap-2 rounded-[10px] bg-white px-7.5 pb-6 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card",
-        className
+        className,
       )}
     >
       <div className="flex flex-wrap items-center justify-between gap-4">

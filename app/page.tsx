@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { PredictionsOverview } from "@/components/predictionsOverview";
-import { Text } from "@/components/text";
-import { getData } from "@/utils/get-data";
-import { useModel } from "@/components/model-context";
 import { MessageError } from "@/components/messageError";
 import { MessageLoading } from "@/components/messageLoading";
+import { useModel } from "@/components/model-context";
+import { PredictionsOverview } from "@/components/predictionsOverview";
 import { DataProps } from "@/types/data";
+import { getData } from "@/utils/get-data";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { selectedModel } = useModel();
@@ -80,7 +79,7 @@ export default function Home() {
         <PredictionsOverview
           data={data_day}
           className="col-span-12 xl:col-span-12"
-          title="Prédictions pour aujourd'hui"
+          title="Prédictions pour les prochaines heures"
         />
       )}
     </div>

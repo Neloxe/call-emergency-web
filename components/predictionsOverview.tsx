@@ -1,17 +1,15 @@
 import { cn } from "@/utils/utils";
 import { PredictionsOverviewChart } from "@/components/predictionsOverviewChart";
+import { DataProps } from "@/types/data";
 
 type PropsType = {
-  data: {
-    predictions: number[];
-    reals: number[];
-  };
+  data: DataProps;
   className?: string;
   title?: string;
 };
 
 export function PredictionsOverview({ data, className, title }: PropsType) {
-  const { predictions, reals } = data;
+  const { predictions, reals, futures } = data;
 
   return (
     <div
@@ -25,7 +23,11 @@ export function PredictionsOverview({ data, className, title }: PropsType) {
           {title ?? "Prédictions"}
         </h2>
       </div>
-      <PredictionsOverviewChart predictions={predictions} reals={reals} />
+      <PredictionsOverviewChart
+        predictions={predictions}
+        reals={reals}
+        futures={futures}
+      />
       <div className="pt-4 text-center">Indice de confiance : ???</div>
     </div>
   );

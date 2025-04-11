@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const selectedModel = searchParams.get("selectedModel");
-    const nDays = Math.max(0, parseInt(searchParams.get("n_days") || "0", 10)); // Ensure nDays is non-negative
+    const nDays = Math.max(0, parseInt(searchParams.get("n_days") || "0", 10));
 
     if (!selectedModel) {
       return NextResponse.json(
@@ -17,7 +17,8 @@ export async function GET(request: Request) {
     }
 
     const predPath = path.join(process.cwd(), "data", `pred-${selectedModel}.csv`);
-    const realPath = path.join(process.cwd(), "data", "real.csv");
+    const realPath = path.join(process.cwd(), "data", `test-${selectedModel}.csv`);
+    const futuresPath = path.join(process.cwd(), "data", `futures-${selectedModel}.csv`);
 
     if (!fs.existsSync(predPath)) {
       return NextResponse.json(
@@ -33,8 +34,16 @@ export async function GET(request: Request) {
       );
     }
 
+    if (!fs.existsSync(futuresPath)) {
+      return NextResponse.json(
+        { error: `Le fichier futur est introuvable : ${futuresPath}` },
+        { status: 404 }
+      );
+    }
+
     const predContent = fs.readFileSync(predPath, "utf-8");
     const realContent = fs.readFileSync(realPath, "utf-8");
+    const futuresContent = fs.readFileSync(futuresPath, "utf-8");
 
     const predRecords = parse(predContent, {
       columns: true,
@@ -46,20 +55,38 @@ export async function GET(request: Request) {
       skip_empty_lines: true,
     });
 
+    const futuresRecords = parse(futuresContent, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
     const maxPredDays = predRecords.length;
     const maxRealDays = realRecords.length;
 
-    const validNDays = Math.min(nDays, maxPredDays, maxRealDays); // Ensure nDays does not exceed available records
+    const validNDays = Math.min(nDays, maxPredDays, maxRealDays);
 
     const predictions = predRecords
-      .map((record: any) => Number(record.Predictions))
-      .slice(-validNDays);
+      .slice(-validNDays*24)
+      .map((record: any) => ({
+        date: record.Date,
+        value: Number(record.Predictions),
+      }));
 
     const reals = realRecords
-      .map((record: any) => Number(record.Calls))
-      .slice(-validNDays);
+      .slice(-validNDays*24)
+      .map((record: any) => ({
+        date: record.Date,
+        value: Number(record.Predictions),
+      }));
 
-    return NextResponse.json({ predictions, reals });
+    const futures = futuresRecords
+      .slice(-validNDays*24)
+      .map((record: any) => ({
+        date: record.Date,
+        value: Number(record.Predictions),
+      }));
+
+    return NextResponse.json({ predictions, reals, futures });
   } catch (error) {
     console.error("Erreur lors de la lecture des fichiers CSV :", error);
     return NextResponse.json(

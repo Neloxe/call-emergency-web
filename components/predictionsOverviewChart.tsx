@@ -1,21 +1,18 @@
 "use client";
 
-//TODO:
-// - choisir une date
-
+import { DataProps } from "@/types/data";
 import type { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
-
-type PropsType = {
-  predictions: number[];
-  reals: number[];
-};
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export function PredictionsOverviewChart({ predictions, reals }: PropsType) {
+export function PredictionsOverviewChart({
+  predictions,
+  reals,
+  futures,
+}: DataProps) {
   const options: ApexOptions = {
     legend: {
       show: false,
@@ -86,7 +83,7 @@ export function PredictionsOverviewChart({ predictions, reals }: PropsType) {
       },
     },
     xaxis: {
-      categories: predictions.map((_, index) => predictions[index][""]),
+      categories: predictions.map((prediction) => prediction.date),
       axisBorder: {
         show: false,
       },
@@ -99,18 +96,16 @@ export function PredictionsOverviewChart({ predictions, reals }: PropsType) {
           fontWeight: "normal",
           colors: "#333",
         },
-        formatter: (value) => value.toString(),
+        formatter: (value) => (value !== undefined ? value.toString() : ""),
       },
       title: {
-        text: predictions.length > 167 ? "Jours et heures" : "Heures",
+        text: predictions.length > 167 ? "Dates" : "Heures",
         style: {
           fontSize: "14px",
           fontWeight: "bold",
           color: "#333",
         },
       },
-      min: 0,
-      max: predictions.length - 1,
     },
     yaxis: {
       title: {
@@ -135,11 +130,15 @@ export function PredictionsOverviewChart({ predictions, reals }: PropsType) {
           series={[
             {
               name: "Prédictions",
-              data: predictions.flatMap((prediction) => prediction),
+              data: predictions.map((prediction) => prediction.value),
             },
             {
               name: "Réels",
-              data: reals.flatMap((real) => real),
+              data: reals.map((real) => real.value),
+            },
+            {
+              name: "Futurs",
+              data: futures.map((future) => future.value),
             },
           ]}
           type="area"

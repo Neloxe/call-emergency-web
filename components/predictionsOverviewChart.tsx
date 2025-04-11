@@ -11,6 +11,8 @@ export function PredictionsOverviewChart({
   reals,
   futures,
 }: DataProps) {
+  console.log("Futures", futures);
+
   // Combine all dates from predictions, reals, and futures
   const allDatesSet = new Set([
     ...predictions.map((prediction) => prediction.date),
@@ -158,12 +160,16 @@ export function PredictionsOverviewChart({
           }
 
           // If 00:00, show only the date
+          const displayDate = new Date(date.getTime());
           if (date.getHours() === 0 && date.getMinutes() === 0) {
-            return date.toISOString().split("T")[0];
-          } else {
-            return date.toLocaleTimeString("fr-FR", {
+            return displayDate.toLocaleDateString("fr-FR", {
+              month: "2-digit",
+              day: "2-digit",
               hour: "2-digit",
-              minute: "2-digit",
+            });
+          } else {
+            return displayDate.toLocaleTimeString("fr-FR", {
+              hour: "2-digit",
             });
           }
         },
@@ -171,7 +177,7 @@ export function PredictionsOverviewChart({
         rotateAlways: true, // Forcer la rotation même si les étiquettes ne se chevauchent pas
         hideOverlappingLabels: false, // Ne pas masquer les étiquettes qui se chevauchent
       },
-      tickAmount: allDates.length > 167 ? 10 : 20,
+      tickAmount: allDates.length > 167 ? 10 : 24,
       title: {
         text: allDates.length > 167 ? "Dates" : "Heures",
         style: {

@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import { parse } from "csv-parse/sync";
+import fs from "fs";
+import { NextResponse } from "next/server";
+import path from "path";
 
 export async function GET(request: Request) {
   try {
@@ -12,32 +12,44 @@ export async function GET(request: Request) {
     if (!selectedModel) {
       return NextResponse.json(
         { error: "Le paramètre 'selectedModel' est requis." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const predPath = path.join(process.cwd(), "data", `pred-${selectedModel}.csv`);
-    const realPath = path.join(process.cwd(), "data", `test-${selectedModel}.csv`);
-    const futuresPath = path.join(process.cwd(), "data", `futures-${selectedModel}.csv`);
+    const predPath = path.join(
+      process.cwd(),
+      "data",
+      `pred-${selectedModel}.csv`,
+    );
+    const realPath = path.join(
+      process.cwd(),
+      "data",
+      `test-${selectedModel}.csv`,
+    );
+    const futuresPath = path.join(
+      process.cwd(),
+      "data",
+      `futures-${selectedModel}.csv`,
+    );
 
     if (!fs.existsSync(predPath)) {
       return NextResponse.json(
         { error: `Le fichier prédictions est introuvable : ${predPath}` },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (!fs.existsSync(realPath)) {
       return NextResponse.json(
         { error: `Le fichier réel est introuvable : ${realPath}` },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (!fs.existsSync(futuresPath)) {
       return NextResponse.json(
         { error: `Le fichier futur est introuvable : ${futuresPath}` },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -66,21 +78,19 @@ export async function GET(request: Request) {
     const validNDays = Math.min(nDays, maxPredDays, maxRealDays);
 
     const predictions = predRecords
-      .slice(-validNDays*24)
+      .slice(-validNDays * 24)
       .map((record: any) => ({
         date: record.Date,
         value: Number(record.Predictions),
       }));
 
-    const reals = realRecords
-      .slice(-validNDays*24)
-      .map((record: any) => ({
-        date: record.Date,
-        value: Number(record.Predictions),
-      }));
+    const reals = realRecords.slice(-validNDays * 24).map((record: any) => ({
+      date: record.Date,
+      value: Number(record.Predictions),
+    }));
 
     const futures = futuresRecords
-      .slice(-validNDays*24)
+      .slice(0, validNDays * 24)
       .map((record: any) => ({
         date: record.Date,
         value: Number(record.Predictions),
@@ -91,7 +101,7 @@ export async function GET(request: Request) {
     console.error("Erreur lors de la lecture des fichiers CSV :", error);
     return NextResponse.json(
       { error: "Impossible de lire les fichiers CSV." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

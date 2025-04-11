@@ -1,7 +1,9 @@
+import { DataProps } from "@/types/data";
+
 export async function getData(
   n_days: number,
   selectedModel: string,
-): Promise<{ predictions: number[]; reals: number[] }> {
+): Promise<DataProps> {
   let name_model;
   if (selectedModel === "Merlain-Week") {
     name_model = "week";

@@ -28,7 +28,6 @@ export const FileUpload = () => {
         method: "POST",
         body: formData,
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.error || "Une erreur est survenue.");

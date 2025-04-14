@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -15,8 +16,17 @@ def format_file():
 
     try:
         dfs = pd.read_excel(file, engine="openpyxl", sheet_name=None)
-        data_df = pd.DataFrame(columns=["Date", "Calls"])
+
         error_list = []
+
+        csv_file = "data.csv"
+        folder_path = "./data/"
+        if os.path.exists(csv_file):
+            existing_data = pd.read_csv(csv_file, parse_dates=["Date"])
+        else:
+            existing_data = pd.DataFrame(columns=["Date", "Calls"])
+
+        all_new_data = []
 
         for sheet_name, df in dfs.items():
             df_cleaned = df.dropna()
@@ -37,8 +47,6 @@ def format_file():
 
             df_transposed["Date"] = pd.to_datetime(df_transposed["Date"])
 
-            new_data = []
-
             for index, row in df_transposed.iterrows():
                 sum_hours = sum(
                     row[col]
@@ -51,7 +59,7 @@ def format_file():
                 if abs(sum_hours - total) <= 5:
                     for col in df_transposed.columns:
                         if col not in ["Date", "Total"]:
-                            new_data.append(
+                            all_new_data.append(
                                 {
                                     "Date": f"{row['Date'].date()} {col}:00",
                                     "Calls": row[col],
@@ -62,21 +70,21 @@ def format_file():
                         {"Date": row["Date"], "Difference": total - sum_hours}
                     )
 
-            if len(new_data) > 0:
-                new_df = pd.DataFrame(new_data)
-                new_df["Date"] = pd.to_datetime(
-                    new_df["Date"], format="%Y-%m-%d %H:%M:%S"
-                )
-                data_df = pd.concat([data_df, new_df], ignore_index=True)
+        if all_new_data:
+            new_df = pd.DataFrame(all_new_data)
+            new_df["Date"] = pd.to_datetime(new_df["Date"], format="%Y-%m-%d %H:%M:%S")
 
-        data_df = data_df.drop_duplicates()
-        data_df = data_df.sort_values(by="Date")
-        data_df = data_df.reset_index(drop=True)
+            combined_data = pd.concat([existing_data, new_df], ignore_index=True)
+            combined_data = combined_data.drop_duplicates(subset=["Date"], keep="first")
+            combined_data = combined_data.sort_values(by="Date")
+            combined_data = combined_data.reset_index(drop=True)
 
-        csv_path = "data.csv"
-        data_df.to_csv("./data/" + csv_path, index=False)
+            combined_data.to_csv(folder_path + csv_file, index=False)
 
-        return jsonify({"csv_path": csv_path}), 200
+        errors = pd.DataFrame(error_list)
+        errors.to_csv(folder_path + "errors.csv", index=False)
+
+        return jsonify({"csv_path": csv_file}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

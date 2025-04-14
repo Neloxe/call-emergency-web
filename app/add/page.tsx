@@ -1,4 +1,4 @@
-import { Text } from "@/components/text";
+import { FileUpload } from "@/components/fileUpload";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,12 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AddPage() {
-  return (
-    <Text
-      title="Ajout de données"
-      body={
-        <p>Là on va mettre en place une méthode pour ajouter des données.</p>
-      }
-    />
-  );
+  return <FileUpload />;
 }

@@ -1,6 +1,6 @@
-import { DataProps } from "@/types/data";
 import type { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -32,9 +32,7 @@ export function PredictionsOverviewChart({
     ...futures.map((future) => future.date),
   ]);
 
-  const currentDate = new Date("2024-10-31T23:00:00"); // TODO: à remplacer par la date actuelle
-
-  const allDates = Array.from(allDatesSet).sort();
+  const currentDate = new Date("2024-10-31T23:00:00Z");
 
   const getDataForDates = (
     data: { date: string; value: number }[],
@@ -46,6 +44,18 @@ export function PredictionsOverviewChart({
     });
   };
 
+  const allDates = Array.from(allDatesSet).sort();
+  const predictionsData = getDataForDates(predictions, allDates);
+  const realsData = getDataForDates(reals, allDates);
+  const futuresData = getDataForDates(futures, allDates);
+
+  const mergeDate = futures.length > 0 ? futures[0].date : null;
+  const mergeIndex = mergeDate ? allDates.indexOf(mergeDate) : -1;
+
+  const combinedSeriesData = predictionsData.map((value, index) =>
+    index < mergeIndex ? value : futuresData[index],
+  );
+
   const [startDate, endDate] = dateRange;
 
   const filteredDates = allDates.filter((date) => {
@@ -55,18 +65,14 @@ export function PredictionsOverviewChart({
     return isAfterStartDate && isBeforeEndDate;
   });
 
-  const filteredPredictionsData = getDataForDates(predictions, filteredDates);
-  const filteredRealsData = getDataForDates(reals, filteredDates);
-  const filteredFuturesData = getDataForDates(futures, filteredDates);
+  const filteredRealsData = realsData.slice(
+    allDates.indexOf(filteredDates[0]),
+    allDates.indexOf(filteredDates[filteredDates.length - 1]) + 1,
+  );
 
-  const filteredMergeDate = futures.length > 0 ? futures[0].date : null;
-  const filteredMergeIndex = filteredMergeDate
-    ? filteredDates.indexOf(filteredMergeDate)
-    : -1;
-
-  const filteredCombinedSeriesData = filteredPredictionsData.map(
-    (value, index) =>
-      index < filteredMergeIndex ? value : filteredFuturesData[index],
+  const filteredCombinedSeriesData = combinedSeriesData.slice(
+    allDates.indexOf(filteredDates[0]),
+    allDates.indexOf(filteredDates[filteredDates.length - 1]) + 1,
   );
 
   const options: ApexOptions = {
@@ -193,9 +199,9 @@ export function PredictionsOverviewChart({
         rotateAlways: true,
         hideOverlappingLabels: false,
       },
-      tickAmount: filteredDates.length > 167 ? 10 : 24,
+      tickAmount: allDates.length > 167 ? 10 : 24,
       title: {
-        text: filteredDates.length > 167 ? "Dates" : "Heures",
+        text: allDates.length > 167 ? "Dates" : "Heures",
         style: {
           fontSize: "14px",
           fontWeight: "bold",

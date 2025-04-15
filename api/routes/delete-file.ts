@@ -12,11 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const absolutePath = path.resolve(filePath);
 
-    // Check if the file exists before attempting to delete it
     try {
       await fs.access(absolutePath);
     } catch {
-      // File does not exist, return a 200 status with a message
       return res.status(200).json({ message: 'File does not exist, nothing to delete' });
     }
 

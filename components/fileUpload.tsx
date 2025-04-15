@@ -1,21 +1,23 @@
 "use client";
 import { useState } from "react";
 import { validateFile } from "@/services/fileService";
+import MessageToast from "./messageToast";
 
 export const FileUpload = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<
+    "success" | "error" | "info" | "warning"
+  >("info");
 
   const handleFileUpload = async (uploadedFile: File) => {
-    setError(null);
-    setSuccessMessage(null);
     setIsLoading(true);
 
     const validationResult = validateFile(uploadedFile);
     if (!validationResult.valid) {
-      setError(validationResult.error);
+      setToastMessage(validationResult.error);
+      setToastType("error");
       setIsLoading(false);
       return;
     }
@@ -30,14 +32,19 @@ export const FileUpload = () => {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.error || "Une erreur est survenue.");
+        const errorMsg = errorData.error || "Une erreur est survenue.";
+        setToastMessage(errorMsg);
+        setToastType("error");
         return;
       }
 
-      setSuccessMessage(`Fichier traité avec succès`);
+      setToastMessage("Fichier traité avec succès");
+      setToastType("success");
       setFile(uploadedFile);
     } catch (err) {
-      setError("Impossible de traiter le fichier.");
+      const errorMsg = "Impossible de traiter le fichier.";
+      setToastMessage(errorMsg);
+      setToastType("error");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -46,6 +53,13 @@ export const FileUpload = () => {
 
   return (
     <div className="container mx-auto max-w-5xl px-4">
+      {toastMessage && (
+        <MessageToast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setToastMessage(null)}
+        />
+      )}
       {!file ? (
         <div
           onDragOver={(e) => {
@@ -75,20 +89,12 @@ export const FileUpload = () => {
               }
             }}
           />
-          {error && (
-            <p className="mt-2 text-red-500 dark:text-red-400">{error}</p>
-          )}
         </div>
       ) : (
         <div className="flex flex-col items-center">
           <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
             Fichier téléchargé : {file.name}
           </p>
-          {successMessage && (
-            <p className="mt-2 text-green-500 dark:text-green-400">
-              {successMessage}
-            </p>
-          )}
         </div>
       )}
     </div>

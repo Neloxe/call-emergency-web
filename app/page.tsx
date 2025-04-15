@@ -101,17 +101,17 @@ export default function Home() {
           className="col-span-12 xl:col-span-12"
           title="Prédictions sur la semaine"
           addDateRange={true}
-          dateRange={dateRangeWeek} // Utilise l'état spécifique à la semaine
-          setDateRange={setDateRangeWeek} // Met à jour uniquement l'état de la semaine
+          dateRange={dateRangeWeek}
+          setDateRange={setDateRangeWeek}
         />
       )} */}
-      {/* {data_day && (
+      {data_day && (
         <PredictionsOverview
           data={data_day}
           className="col-span-12 xl:col-span-12"
           title="Prédictions sur la journée"
         />
-      )} */}
+      )}
     </div>
   );
 }

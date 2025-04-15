@@ -1,7 +1,7 @@
 import { DataProps } from "@/types/data";
 
 export async function getData(
-  n_days: number,
+  n_days: number | null,
   selectedModel: string,
 ): Promise<DataProps> {
   let name_model;
@@ -15,8 +15,10 @@ export async function getData(
     throw new Error("Invalid model selected");
   }
 
-  const url = `http://localhost:3000/api?selectedModel=${encodeURIComponent(name_model)}&n_days=${n_days}`;
-  
+  const url = `http://localhost:3000/api?selectedModel=${encodeURIComponent(name_model)}${
+    n_days !== null ? `&n_days=${n_days}` : ""
+  }`;
+
   const response = await fetch(url);
 
   if (!response.ok) {

@@ -7,7 +7,8 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const selectedModel = searchParams.get("selectedModel");
-    const nDays = Math.max(0, parseInt(searchParams.get("n_days") || "0", 10));
+    const nDaysParam = searchParams.get("n_days");
+    const nDays = nDaysParam ? Math.max(0, parseInt(nDaysParam, 10)) : null;
 
     if (!selectedModel) {
       return NextResponse.json(
@@ -75,7 +76,7 @@ export async function GET(request: Request) {
     const maxPredDays = predRecords.length;
     const maxRealDays = realRecords.length;
 
-    const validNDays = Math.min(nDays, maxPredDays, maxRealDays);
+    const validNDays = nDays !== null ? Math.min(nDays, maxPredDays, maxRealDays) : Math.min(maxPredDays, maxRealDays);
 
     const predictions = predRecords
       .slice(-validNDays * 24)

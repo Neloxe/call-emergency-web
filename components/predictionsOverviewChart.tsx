@@ -10,26 +10,32 @@ export function PredictionsOverviewChart({
   predictions,
   reals,
   futures,
-}: DataProps) {
-  console.log("Futures", futures);
-
-  // Combine all dates from predictions, reals, and futures
+  dateRange,
+}: {
+  predictions: {
+    date: string;
+    value: number;
+  }[];
+  reals: {
+    date: string;
+    value: number;
+  }[];
+  futures: {
+    date: string;
+    value: number;
+  }[];
+  dateRange: [string | null, string | null];
+}) {
   const allDatesSet = new Set([
     ...predictions.map((prediction) => prediction.date),
     ...reals.map((real) => real.date),
     ...futures.map((future) => future.date),
   ]);
 
-  const currentDate = new Date("2024-10-31T23:00:00Z"); // Example current date, replace with actual current date if needed
+  const currentDate = new Date("2024-10-31T23:00:00"); // TODO: à remplacer par la date actuelle
 
-  // Convert the set to a sorted array
   const allDates = Array.from(allDatesSet).sort();
 
-  // Determine the merge date
-  const mergeDate = futures.length > 0 ? futures[0].date : null;
-  const mergeIndex = mergeDate ? allDates.indexOf(mergeDate) : -1;
-
-  // Map data to the combined dates array
   const getDataForDates = (
     data: { date: string; value: number }[],
     allDates: string[],
@@ -40,13 +46,27 @@ export function PredictionsOverviewChart({
     });
   };
 
-  const predictionsData = getDataForDates(predictions, allDates);
-  const realsData = getDataForDates(reals, allDates);
-  const futuresData = getDataForDates(futures, allDates);
+  const [startDate, endDate] = dateRange;
 
-  // Create a single combined series for predictions and futures
-  const combinedSeriesData = predictionsData.map((value, index) =>
-    index < mergeIndex ? value : futuresData[index],
+  const filteredDates = allDates.filter((date) => {
+    const dateObj = new Date(date);
+    const isAfterStartDate = startDate ? dateObj >= new Date(startDate) : true;
+    const isBeforeEndDate = endDate ? dateObj <= new Date(endDate) : true;
+    return isAfterStartDate && isBeforeEndDate;
+  });
+
+  const filteredPredictionsData = getDataForDates(predictions, filteredDates);
+  const filteredRealsData = getDataForDates(reals, filteredDates);
+  const filteredFuturesData = getDataForDates(futures, filteredDates);
+
+  const filteredMergeDate = futures.length > 0 ? futures[0].date : null;
+  const filteredMergeIndex = filteredMergeDate
+    ? filteredDates.indexOf(filteredMergeDate)
+    : -1;
+
+  const filteredCombinedSeriesData = filteredPredictionsData.map(
+    (value, index) =>
+      index < filteredMergeIndex ? value : filteredFuturesData[index],
   );
 
   const options: ApexOptions = {
@@ -79,10 +99,9 @@ export function PredictionsOverviewChart({
       xaxis: [
         {
           x: new Date(currentDate).getTime(),
-          borderColor: "#FF0000", // Couleur rouge pour plus de visibilité
-          borderWidth: 2, // Épaisseur de la ligne
+          borderColor: "#FF0000",
+          borderWidth: 2,
           label: {
-            show: true,
             text: "Présent",
             style: {
               color: "#fff",
@@ -129,7 +148,7 @@ export function PredictionsOverviewChart({
       },
     },
     xaxis: {
-      categories: allDates,
+      categories: filteredDates,
       axisBorder: {
         show: false,
       },
@@ -146,12 +165,10 @@ export function PredictionsOverviewChart({
           if (!value) return "";
           const date = new Date(value);
 
-          // Check if the date is today's date
           const isToday =
             date.toISOString().split("T")[0] ===
             currentDate.toISOString().split("T")[0];
 
-          // Format the date based on the range of dates
           if (allDates.length > 24 * 7) {
             if (isToday) {
               return "Aujourd'hui";
@@ -159,7 +176,6 @@ export function PredictionsOverviewChart({
             return date.toISOString().split("T")[0];
           }
 
-          // If 00:00, show only the date
           const displayDate = new Date(date.getTime());
           if (date.getHours() === 0 && date.getMinutes() === 0) {
             return displayDate.toLocaleDateString("fr-FR", {
@@ -173,13 +189,13 @@ export function PredictionsOverviewChart({
             });
           }
         },
-        rotate: -45, // Rotation des étiquettes
-        rotateAlways: true, // Forcer la rotation même si les étiquettes ne se chevauchent pas
-        hideOverlappingLabels: false, // Ne pas masquer les étiquettes qui se chevauchent
+        rotate: -45,
+        rotateAlways: true,
+        hideOverlappingLabels: false,
       },
-      tickAmount: allDates.length > 167 ? 10 : 24,
+      tickAmount: filteredDates.length > 167 ? 10 : 24,
       title: {
-        text: allDates.length > 167 ? "Dates" : "Heures",
+        text: filteredDates.length > 167 ? "Dates" : "Heures",
         style: {
           fontSize: "14px",
           fontWeight: "bold",
@@ -212,13 +228,13 @@ export function PredictionsOverviewChart({
               name: "Prédictions",
               type: "line",
               color: "#5750F1",
-              data: combinedSeriesData,
+              data: filteredCombinedSeriesData,
             },
             {
               name: "Réels",
               type: "line",
               color: "#0ABEF9",
-              data: realsData,
+              data: filteredRealsData,
             },
           ]}
           height={310}

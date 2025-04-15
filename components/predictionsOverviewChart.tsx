@@ -1,6 +1,6 @@
 import type { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { COLORS } from "@/utils/color";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -233,13 +233,13 @@ export function PredictionsOverviewChart({
             {
               name: "Prédictions",
               type: "line",
-              color: "#5750F1",
+              color: COLORS.ORANGE,
               data: filteredCombinedSeriesData,
             },
             {
               name: "Réels",
               type: "line",
-              color: "#0ABEF9",
+              color: COLORS.BLUE,
               data: filteredRealsData,
             },
           ]}

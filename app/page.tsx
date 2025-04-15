@@ -1,5 +1,6 @@
 "use client";
 
+import { Forecast } from "@/components/forecast";
 import { MessageError } from "@/components/messageError";
 import { MessageLoading } from "@/components/messageLoading";
 import { useModel } from "@/components/model-context";
@@ -85,6 +86,19 @@ export default function Home() {
   return (
     <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
       <Statistics />
+      {data_day && (
+        <>
+          <PredictionsOverview
+            data={data_day}
+            className="col-span-12 xl:col-span-10"
+            title="Prédictions sur la journée"
+          />
+          <Forecast
+            className="col-span-12 xl:col-span-2"
+            data={data_day.futures}
+          />
+        </>
+      )}
       {data_month && (
         <PredictionsOverview
           data={data_month}
@@ -105,13 +119,6 @@ export default function Home() {
           setDateRange={setDateRangeWeek}
         />
       )} */}
-      {data_day && (
-        <PredictionsOverview
-          data={data_day}
-          className="col-span-12 xl:col-span-12"
-          title="Prédictions sur la journée"
-        />
-      )}
     </div>
   );
 }

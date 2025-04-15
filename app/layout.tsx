@@ -9,6 +9,7 @@ import { Providers } from "@/app/provider";
 
 import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
+import { COLORS } from "@/utils/color";
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" className={theme} style={{ colorScheme: theme }}>
       <body>
         <Providers>
-          <NextTopLoader color="#5750F1" showSpinner={false} />
+          <NextTopLoader color={COLORS.BLUE} showSpinner={false} />
 
           <div className="flex min-h-screen">
             <Sidebar />
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
             <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
               <Header />
 
-              <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
+              <main className="max-w-screen-l isolate mx-auto w-full overflow-hidden p-4 md:p-6 2xl:p-10">
                 {children}
               </main>
             </div>

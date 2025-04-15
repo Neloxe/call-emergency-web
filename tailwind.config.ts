@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
+import { COLORS } from "./utils/color";
 
 const config: Config = {
   content: [
@@ -23,7 +24,7 @@ const config: Config = {
         current: "currentColor",
         transparent: "transparent",
         white: "#FFFFFF",
-        primary: "#5750F1",
+        primary: COLORS.BLUE,
         stroke: "#E6EBF1",
         "stroke-dark": "#27303E",
         dark: {

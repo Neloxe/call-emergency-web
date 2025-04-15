@@ -2,7 +2,13 @@
 
 import React from "react";
 import Badge from "@/components/badge";
-import { ArrowDownIcon, ArrowUpIcon, TrendingUpIcon } from "@/assets/icons";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  TrendingUpIcon,
+  CheckIcon,
+  XIcon,
+} from "@/assets/icons";
 
 interface MetricCardProps {
   icon: React.ReactElement<{ className?: string }>;
@@ -56,13 +62,13 @@ export const Statistics = () => {
         badgeValue="+3%"
       />
       <MetricCard
-        icon={<TrendingUpIcon />}
+        icon={<CheckIcon />}
         title="Taux de confiance sur la prédiction"
         value="85%"
         badgeValue="+5%"
       />
       <MetricCard
-        icon={<TrendingUpIcon className="text-gray-800 dark:text-white/90" />}
+        icon={<XIcon className="text-gray-800 dark:text-white/90" />}
         title="Erreurs de prédiction sur les 7 derniers jours"
         value="9%"
         badgeValue="-5%"

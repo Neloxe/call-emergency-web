@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect, useState } from "react";
 import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 
@@ -11,19 +13,21 @@ import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import { COLORS } from "@/utils/color";
 
-export const metadata: Metadata = {
-  title: {
-    template: "Merlain - %s",
-    default: "Merlain",
-  },
-  description:
-    "Prédiction du nombre d'appel pour le Centre de Réception et de Régulation des Appels.",
-};
+type themeType = "light" | "dark";
+
 export default function RootLayout({ children }: PropsWithChildren) {
-  const theme =
-    typeof window !== "undefined"
-      ? localStorage.getItem("theme") || "light"
-      : "light";
+  const [theme, setTheme] = useState<themeType>("light");
+
+  useEffect(() => {
+    const storedTheme = (localStorage.getItem("theme") as themeType) || "light";
+    setTheme(storedTheme);
+  }, []);
+
+  if (theme === null) {
+    <div className="flex min-h-screen items-center justify-center bg-gray-2 text-gray-800 dark:bg-[#020d1a] dark:text-gray-200">
+      Chargement...
+    </div>;
+  }
 
   return (
     <html lang="en" className={theme} style={{ colorScheme: theme }}>

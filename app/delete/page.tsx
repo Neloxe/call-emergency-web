@@ -55,8 +55,14 @@ export default function DeletePage() {
         title="Suppression des données"
         body={
           <div className="relative">
-            Cliquer sur le bouton ci-dessous pour supprimer les données
-            enregistrées.
+            <p>
+              Cliquer sur le bouton ci-dessous pour supprimer les données
+              enregistrées.
+            </p>
+            <ul className="list-disc pl-5">
+              <li>Assurez-vous d'avoir sauvegardé vos données.</li>
+              <li>Cette action est irréversible.</li>
+            </ul>
             <div className="mt-8 flex justify-center">
               <Button
                 label="Suppression"
@@ -66,7 +72,7 @@ export default function DeletePage() {
               />
             </div>
             {showConfirmation && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50">
                 <div className="rounded border bg-white p-6 shadow-lg">
                   <p>Êtes-vous sûr de vouloir supprimer les données ?</p>
                   <div className="mt-4 flex justify-center gap-4">

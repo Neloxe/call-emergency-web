@@ -7,24 +7,14 @@ export type PropsType = {
 };
 
 export function Clock({ className }: PropsType) {
-  const [currentDate, setCurrentDate] = useState<Date | null>(null);
-
+  const [currentDate, setCurrentDate] = useState<Date>(fakeDate);
   useEffect(() => {
-    setCurrentDate(fakeDate);
-
     const interval = setInterval(() => {
-      setCurrentDate((prevDate) => {
-        if (!prevDate) return fakeDate;
-        return new Date(prevDate.getTime() + 1000);
-      });
+      setCurrentDate(fakeDate);
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
-
-  if (!currentDate) {
-    return <div>Chargement...</div>;
-  }
 
   return (
     <div

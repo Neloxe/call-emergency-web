@@ -18,10 +18,10 @@ export function MessageLoading({ className }: PropsType) {
   return (
     <div
       className={cn(
-        "h-full w-full rounded-[10px] bg-orange-100 px-7.5 pt-7.5 pb-5 shadow-1 dark:bg-orange-900 dark:shadow-card",
-        className
+        "w-full rounded-[10px] bg-orange-100 px-7.5 pb-5 pt-7.5 shadow-1 dark:bg-orange-900 dark:shadow-card",
+        className,
       )}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%" }}
     >
       <div className="flex flex-wrap items-center">
         <h2 className="text-body-2xlg font-bold text-orange-700 dark:text-orange-300">

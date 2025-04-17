@@ -232,7 +232,7 @@ export function Forecast({ data, className }: Props) {
                       "flex flex-1 flex-col",
                       colIdx !== 0 && "border-l border-black dark:border-white",
                     )}
-                    style={{ minWidth: 150 }}
+                    style={{ minWidth: 160 }}
                   >
                     {col.map((group, rowIdx) => (
                       <div
@@ -246,7 +246,8 @@ export function Forecast({ data, className }: Props) {
                             day: "2-digit",
                             month: "2-digit",
                             hour: "2-digit",
-                          })}
+                          })}{" "}
+                          :
                         </span>
                         <span className="ml-4 font-medium text-dark dark:text-white">
                           {Math.ceil(group.value)}

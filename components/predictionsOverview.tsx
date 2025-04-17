@@ -10,8 +10,6 @@ type PropsType = {
   title?: string;
   className?: string;
   addDateRange?: boolean;
-  dateRange?: [string | null, string | null];
-  setDateRange?: (range: [string | null, string | null]) => void;
 };
 
 export function PredictionsOverview({
@@ -19,15 +17,39 @@ export function PredictionsOverview({
   className,
   title = "Prédictions",
   addDateRange = false,
-  dateRange = [null, null],
-  setDateRange,
 }: PropsType) {
-  const { predictions, reals, futures } = data;
-
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<
     "success" | "error" | "info" | "warning"
   >("info");
+
+  const [dateRange, setDateRange] = useState<[string | null, string | null]>([
+    null,
+    null,
+  ]);
+
+  const filterDataByDateRange = (
+    data: DataProps,
+    startDate: string | null,
+    endDate: string | null,
+  ): DataProps => {
+    const isWithinRange = (date: string) => {
+      const dateObj = new Date(date);
+      const isAfterStartDate = startDate
+        ? dateObj >= new Date(startDate)
+        : true;
+      const isBeforeEndDate = endDate ? dateObj <= new Date(endDate) : true;
+      return isAfterStartDate && isBeforeEndDate;
+    };
+
+    return {
+      predictions: data.predictions.filter((item) => isWithinRange(item.date)),
+      reals: data.reals.filter((item) => isWithinRange(item.date)),
+      futures: data.futures.filter((item) => isWithinRange(item.date)),
+    };
+  };
+
+  const filteredData = filterDataByDateRange(data, dateRange[0], dateRange[1]);
 
   return (
     <>
@@ -51,7 +73,7 @@ export function PredictionsOverview({
           <h2 className="text-body-2xlg font-bold text-dark dark:text-white">
             {title}
           </h2>
-          {addDateRange && setDateRange && (
+          {addDateRange && (
             <div className="mr-10 flex gap-4">
               <DatePicker
                 id="date-picker-start"
@@ -94,13 +116,15 @@ export function PredictionsOverview({
             </div>
           )}
         </div>
-        <div className="flex gap-4"></div>
-        <PredictionsOverviewChart
-          predictions={predictions}
-          reals={reals}
-          futures={futures}
-          dateRange={dateRange}
-        />
+        {!filteredData ||
+        !filteredData.predictions ||
+        filteredData.predictions.length === 0 ? (
+          <div className="mx-auto flex h-[250px] w-full items-center justify-center pt-10 text-gray-600 dark:text-gray-300">
+            Aucun résultat disponible pour la plage de dates sélectionnée.
+          </div>
+        ) : (
+          <PredictionsOverviewChart data={filteredData} dateRange={dateRange} />
+        )}
       </div>
     </>
   );

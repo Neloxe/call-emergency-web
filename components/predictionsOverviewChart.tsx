@@ -7,25 +7,27 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 });
 
 export function PredictionsOverviewChart({
-  predictions,
-  reals,
-  futures,
+  data,
   dateRange,
 }: {
-  predictions: {
-    date: string;
-    value: number;
-  }[];
-  reals: {
-    date: string;
-    value: number;
-  }[];
-  futures: {
-    date: string;
-    value: number;
-  }[];
+  data: {
+    predictions: {
+      date: string;
+      value: number;
+    }[];
+    reals: {
+      date: string;
+      value: number;
+    }[];
+    futures: {
+      date: string;
+      value: number;
+    }[];
+  };
   dateRange: [string | null, string | null];
 }) {
+  const { predictions, reals, futures } = data;
+
   const allDatesSet = new Set([
     ...predictions.map((prediction) => prediction.date),
     ...reals.map((real) => real.date),

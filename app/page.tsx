@@ -9,6 +9,7 @@ import { DataProps } from "@/types/data";
 import { getData } from "@/utils/get-data";
 import { useEffect, useState } from "react";
 import { Forecast } from "@/components/forecast";
+import { Clock } from "@/components/clock";
 
 export default function Home() {
   const { selectedModel } = useModel();
@@ -56,6 +57,7 @@ export default function Home() {
 
   return (
     <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
+      <Clock className="xl:col-span- col-span-12" />
       <Statistics />
       {data_month && (
         <Forecast

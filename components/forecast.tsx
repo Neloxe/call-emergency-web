@@ -3,6 +3,7 @@ import MessageToast from "@/components/messageToast";
 import DatePicker from "@/components/datePicker";
 import { ChevronUpIcon } from "@/assets/icons";
 import { cn } from "@/utils/utils";
+import { fakeDate } from "@/utils/const";
 import {
   Dropdown,
   DropdownContent,
@@ -25,10 +26,6 @@ export function Forecast({ data, className }: Props) {
     null,
     null,
   ]);
-
-  const [fakeDate, setFakeData] = useState(
-    new Date("2024-11-05 " + new Date().toTimeString().split(" ")[0]),
-  );
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<
@@ -57,15 +54,17 @@ export function Forecast({ data, className }: Props) {
     return true;
   });
 
+  const currentDate = fakeDate;
+
   const groupedData = filteredData.reduce(
     (acc, curr) => {
       const groupInterval = parseInt(groupTime) * 60 * 60 * 1000;
 
       const baseDate = new Date(
-        fakeDate.getFullYear(),
-        fakeDate.getMonth(),
-        fakeDate.getDate(),
-        fakeDate.getHours(),
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate(),
+        currentDate.getHours(),
         0,
         0,
         0,

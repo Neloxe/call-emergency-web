@@ -230,7 +230,7 @@ export function Forecast({ data, className }: Props) {
                     key={colIdx}
                     className={cn(
                       "flex flex-1 flex-col",
-                      colIdx !== 0 && "border-l border-black",
+                      colIdx !== 0 && "border-l border-black dark:border-white",
                     )}
                     style={{ minWidth: 150 }}
                   >

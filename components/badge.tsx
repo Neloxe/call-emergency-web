@@ -39,7 +39,7 @@ const Badge: React.FC<BadgeProps> = ({
   const variants = {
     light: {
       primary:
-        "bg-brand-50 text-brand-500 dark:bg-brand-500/15 dark:text-brand-400",
+        "bg-gray-50 text-brand-500 dark:bg-brand-500/15 dark:text-brand-400",
       success:
         "bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500",
       error: "bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-500",

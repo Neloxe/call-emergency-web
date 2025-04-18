@@ -1,7 +1,7 @@
 import type { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import { COLORS } from "@/utils/color";
-import { fakeDate } from "@/utils/const";
+import { useState, useEffect } from "react";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -35,7 +35,22 @@ export function PredictionsOverviewChart({
     ...futures.map((future) => future.date),
   ]);
 
-  const currentDate = fakeDate;
+  const [currentDate, setCurrentDate] = useState<Date>(() => {
+    const now = new Date();
+    return new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`);
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentDate(
+        new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`),
+      );
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const getDataForDates = (
     data: { date: string; value: number }[],

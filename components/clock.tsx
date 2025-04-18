@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/utils/utils";
-import { fakeDate } from "@/utils/const";
 
 export type PropsType = {
   className?: string;
 };
 
 export function Clock({ className }: PropsType) {
-  const [currentDate, setCurrentDate] = useState<Date>(fakeDate);
+  const [currentDate, setCurrentDate] = useState<Date>(() => {
+    const now = new Date();
+    return new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`);
+  });
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentDate(fakeDate);
+      const now = new Date();
+      setCurrentDate(
+        new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`),
+      );
     }, 1000);
-
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (

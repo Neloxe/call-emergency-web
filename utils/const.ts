@@ -1,1 +1,0 @@
-export const fakeDate = new Date("2024-11-01 " + new Date().toTimeString().split(" ")[0]);

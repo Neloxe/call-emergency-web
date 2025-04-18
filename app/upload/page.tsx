@@ -1,11 +1,11 @@
-import { FileUpload } from "@/components/fileUpload";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Ajout",
-  description: "Ajout de données",
-};
+import { FileUpload } from "@/components/fileUpload";
+import { useEffect } from "react";
 
 export default function AddPage() {
+  useEffect(() => {
+    document.title = "Merlain - Ajouts";
+  }, []);
   return <FileUpload />;
 }

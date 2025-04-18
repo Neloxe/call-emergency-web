@@ -13,7 +13,7 @@ import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import { COLORS } from "@/utils/color";
 
-type themeType = "light" | "dark";
+import { themeType } from "@/types/types";
 
 export default function RootLayout({ children }: PropsWithChildren) {
   const [theme, setTheme] = useState<themeType>("light");
@@ -38,9 +38,8 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <div className="flex min-h-screen">
             <Sidebar />
 
-            <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
+            <div className="min-h-screen w-full bg-gray-2 dark:bg-[#020d1a]">
               <Header />
-
               <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
                 {children}
               </main>

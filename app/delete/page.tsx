@@ -4,8 +4,13 @@ import { Button } from "@/components/button";
 import { Text } from "@/components/text";
 import { useState } from "react";
 import { MessageToast } from "@/components/messageToast";
+import { useEffect } from "react";
 
 export default function DeletePage() {
+  useEffect(() => {
+    document.title = "Merlain - Suppression";
+  }, []);
+
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<
@@ -72,7 +77,10 @@ export default function DeletePage() {
               />
             </div>
             {showConfirmation && (
-              <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50">
+              <div
+                className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+                style={{ transform: "translateZ(0)" }}
+              >
                 <div className="rounded border bg-white p-6 shadow-lg">
                   <p>Êtes-vous sûr de vouloir supprimer les données ?</p>
                   <div className="mt-4 flex justify-center gap-4">

@@ -1,13 +1,14 @@
-import { Text } from "@/components/text";
-import { Metadata } from "next";
-import { EmailIcon } from "@/assets/icons";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Informations",
-  description: "Informations",
-};
+import { Text } from "@/components/text";
+import { EmailIcon } from "@/assets/icons";
+import { useEffect } from "react";
 
 export default function InfoPage() {
+  useEffect(() => {
+    document.title = "Merlain - Informations";
+  }, []);
+
   return (
     <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
       <Text

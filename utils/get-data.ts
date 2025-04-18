@@ -1,4 +1,4 @@
-import { DataProps } from "@/types/data";
+import { DataProps } from "@/types/types";
 
 export async function getData(
   n_days: number | null,

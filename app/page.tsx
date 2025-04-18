@@ -5,13 +5,17 @@ import { MessageLoading } from "@/components/messageLoading";
 import { useModel } from "@/components/model-context";
 import { PredictionsOverview } from "@/components/predictionsOverview";
 import { Statistics } from "@/components/statistic";
-import { DataProps } from "@/types/data";
+import { DataProps } from "@/types/types";
 import { getData } from "@/utils/get-data";
 import { useEffect, useState } from "react";
 import { Forecast } from "@/components/forecast";
 import { Clock } from "@/components/clock";
 
 export default function Home() {
+  useEffect(() => {
+    document.title = "Merlain - Prédictions";
+  }, []);
+
   const { selectedModel } = useModel();
 
   const [data_month, setdata_month] = useState<DataProps | null>(null);
@@ -58,12 +62,14 @@ export default function Home() {
   return (
     <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
       <Clock className="xl:col-span- col-span-12" />
-      <Statistics />
       {data_month && (
-        <Forecast
-          data={data_month.futures}
-          className="xl:col-span- col-span-12"
-        />
+        <>
+          <Statistics data={data_month} className="xl:col-span- col-span-12" />
+          <Forecast
+            data={data_month.futures}
+            className="xl:col-span- col-span-12"
+          />
+        </>
       )}
       {data_day && (
         <PredictionsOverview

@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MessageToast from "@/components/messageToast";
 import DatePicker from "@/components/datePicker";
 import { ChevronUpIcon } from "@/assets/icons";
 import { cn } from "@/utils/utils";
-import { fakeDate } from "@/utils/const";
 import {
   Dropdown,
   DropdownContent,
@@ -19,6 +18,23 @@ type Props = {
 };
 
 export function Forecast({ data, className }: Props) {
+  const [currentDate, setCurrentDate] = useState<Date>(() => {
+    const now = new Date();
+    return new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`);
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentDate(
+        new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`),
+      );
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
   const [groupTime, setGroupTime] = useState("1h");
   const items = ["1h", "2h", "4h", "6h", "8h", "12h", "24h"];
@@ -53,8 +69,6 @@ export function Forecast({ data, className }: Props) {
 
     return true;
   });
-
-  const currentDate = fakeDate;
 
   const groupedData = filteredData.reduce(
     (acc, curr) => {

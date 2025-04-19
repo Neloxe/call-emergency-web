@@ -1,11 +1,12 @@
 "use client";
 
-import { FileUpload } from "@/components/file-upload";
 import { useEffect } from "react";
+
+import Dropzone from "@/components/dropzone";
 
 export default function AddPage() {
   useEffect(() => {
     document.title = "Merlain - Ajouts";
   }, []);
-  return <FileUpload />;
+  return <Dropzone />;
 }

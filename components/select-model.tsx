@@ -8,7 +8,7 @@ import {
   DropdownContent,
   DropdownTrigger,
 } from "@/components/dropdown";
-import { useModel } from "./model-context";
+import { useModel } from "../context/model-context";
 
 type SelectModelProps = {
   items?: string[];

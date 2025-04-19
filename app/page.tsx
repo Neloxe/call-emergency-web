@@ -2,7 +2,7 @@
 
 import { MessageError } from "@/components/messageError";
 import { MessageLoading } from "@/components/messageLoading";
-import { useModel } from "@/components/model-context";
+import { useModel } from "@/context/model-context";
 import { PredictionsOverview } from "@/components/predictionsOverview";
 import { Statistics } from "@/components/statistic";
 import { DataProps } from "@/types/types";

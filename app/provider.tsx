@@ -1,8 +1,8 @@
 "use client";
 
-import { SidebarProvider } from "@/components/sidebar-context";
-import { ModelProvider } from "@/components/model-context";
 import { ThemeProvider } from "next-themes";
+import { SidebarProvider } from "@/context/sidebar-context";
+import { ModelProvider } from "@/context/model-context";
 import { PopupProvider } from "@/context/popupContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {

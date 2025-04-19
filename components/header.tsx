@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useSidebarContext } from "@/components/sidebar-context";
+import { useSidebarContext } from "@/context/sidebar-context";
 import { ThemeToggleSwitch } from "@/components/theme-toggle";
 import { SelectModel } from "./select-model";
 import { MenuIcon } from "@/assets/icons";

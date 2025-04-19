@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_DATA } from "@/utils/navigation";
 import { cva } from "class-variance-authority";
-import { useSidebarContext } from "@/components/sidebar-context";
+import { useSidebarContext } from "@/context/sidebar-context";
 import { ChevronUp } from "@/assets/icons";
 import { NavItem, SubNavItem } from "@/types/types";
 

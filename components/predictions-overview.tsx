@@ -54,6 +54,13 @@ export function PredictionsOverview({
 
   const filteredData = filterDataByDateRange(data, dateRange[0], dateRange[1]);
 
+  const handleDateRangeChange = (range: [string | null, string | null]) => {
+    setDateRange(range);
+  };
+
+  const minDate = new Date(data.predictions[0].date);
+  const maxDate = new Date(data.futures[data.futures.length - 1].date);
+
   return (
     <>
       {toastMessage && (
@@ -82,6 +89,7 @@ export function PredictionsOverview({
               endId="date-picker-end-overview"
               onDateRangeChange={handleDateRangeChange}
               className="mr-10"
+              minDate={minDate}
               maxDate={maxDate}
             />
           )}

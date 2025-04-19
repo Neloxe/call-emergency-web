@@ -8,6 +8,7 @@ type DateRangePickerProps = {
   endId: string;
   onDateRangeChange: (range: [string | null, string | null]) => void;
   className?: string;
+  minDate?: Date;
   maxDate?: Date;
 };
 
@@ -16,6 +17,7 @@ export function DateRangePicker({
   endId,
   onDateRangeChange,
   className,
+  minDate,
   maxDate,
 }: DateRangePickerProps) {
   const [dateRange, setDateRange] = useState<[string | null, string | null]>([
@@ -84,13 +86,14 @@ export function DateRangePicker({
       <DatePicker
         id={startId}
         placeholder="Date de début"
+        minDate={minDate}
         maxDate={dateRange[1] || maxDate}
         onChange={handleStartDateChange}
       />
       <DatePicker
         id={endId}
         placeholder="Date de fin"
-        minDate={dateRange[0] || undefined}
+        minDate={dateRange[0] || minDate}
         maxDate={maxDate}
         onChange={handleEndDateChange}
       />

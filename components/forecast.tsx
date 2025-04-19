@@ -138,6 +138,9 @@ export function Forecast({ data, className }: Props) {
     [] as { date: string; value: number }[][],
   );
 
+  const minDate = new Date(data[0].date);
+  const maxDate = new Date(data[data.length - 1].date);
+
   return (
     <>
       {toastMessage && (
@@ -167,6 +170,7 @@ export function Forecast({ data, className }: Props) {
               endId="date-picker-end-forecast"
               onDateRangeChange={handleDateRangeChange}
               className="ml-auto"
+              minDate={minDate}
               maxDate={maxDate}
             />
             <div className="flex items-center pl-10">

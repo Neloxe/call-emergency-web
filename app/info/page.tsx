@@ -13,7 +13,7 @@ export default function InfoPage() {
     <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
       <Text
         title="À quoi ça sert ?"
-        className="xl:col-span- col-span-12"
+        className="xl:col-span- col-span-4"
         body={
           <p>
             Ce site a pour objectif de fournir des prédictions précises sur le
@@ -56,25 +56,10 @@ export default function InfoPage() {
           </ul>
         }
       />
-      <Text
-        title="Comment ajouter des données ?"
-        className="xl:col-span- col-span-4"
-        body={
-          <p>
-            Pour ajouter des données du nombre d'appels il suffit de déposer
-            dans la page{" "}
-            <span className="font-medium text-dark dark:text-white">
-              Ajouts
-            </span>{" "}
-            le fichier{" "}
-            <span className="font-medium text-dark dark:text-white">Excel</span>{" "}
-            (xlsx) contenant les données.
-          </p>
-        }
-      />
+
       <Text
         title="Je rencontre un problème"
-        className="xl:col-span- col-span-6"
+        className="xl:col-span- col-span-8"
         body={
           <>
             <p>
@@ -101,6 +86,22 @@ export default function InfoPage() {
               </a>
             </div>
           </>
+        }
+      />
+      <Text
+        title="Comment ajouter des données ?"
+        className="xl:col-span- col-span-4"
+        body={
+          <p>
+            Pour ajouter des données du nombre d'appels il suffit de déposer
+            dans la page{" "}
+            <span className="font-medium text-dark dark:text-white">
+              Ajouts
+            </span>{" "}
+            le fichier{" "}
+            <span className="font-medium text-dark dark:text-white">Excel</span>{" "}
+            (xlsx) contenant les données.
+          </p>
         }
       />
     </div>

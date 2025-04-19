@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import {
   ArrowDownIcon,
@@ -13,6 +13,8 @@ import {
 import { cn } from "@/utils/utils";
 
 import { DataProps } from "@/types/types";
+
+import { useFakeDate } from "@/hooks/use-fake-date";
 
 import Badge from "@/components/badge";
 
@@ -101,22 +103,7 @@ type Props = {
 };
 
 export const Statistics = ({ data, className }: Props) => {
-  const [currentDate, setCurrentDate] = useState<Date>(() => {
-    const now = new Date();
-    return new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`);
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setCurrentDate(
-        new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`),
-      );
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  const currentDate = useFakeDate();
 
   const sumDailyCalls = Math.ceil(
     data.futures.reduce((acc, curr) => {

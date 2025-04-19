@@ -1,28 +1,13 @@
-import { useEffect, useState } from "react";
-
 import { cn } from "@/utils/utils";
+
+import { useFakeDate } from "@/hooks/use-fake-date";
 
 export type PropsType = {
   className?: string;
 };
 
 export function Clock({ className }: PropsType) {
-  const [currentDate, setCurrentDate] = useState<Date>(() => {
-    const now = new Date();
-    return new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`);
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setCurrentDate(
-        new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`),
-      );
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  const currentDate = useFakeDate();
 
   return (
     <div

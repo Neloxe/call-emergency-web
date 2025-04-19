@@ -23,26 +23,8 @@ type Props = {
 };
 
 export function Forecast({ data, className }: Props) {
-  const [currentDate, setCurrentDate] = useState<Date>(() => {
-    const now = new Date();
-    return new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`);
-  });
+  const currentDate = useFakeDate();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setCurrentDate(
-        new Date(`2024-11-01T${now.toTimeString().split(" ")[0]}`),
-      );
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [groupTime, setGroupTime] = useState("1h");
-  const items = ["1h", "2h", "4h", "6h", "8h", "12h", "24h"];
   const [dateRange, setDateRange] = useState<[string | null, string | null]>([
     null,
     null,

@@ -1,12 +1,14 @@
 import { cn } from "@/utils/utils";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { DataProps } from "@/types/types";
 
 import MessageToast from "@/components/message-toast";
 import { PredictionsOverviewChart } from "@/components/predictions-overview-chart";
 import { DateRangePicker } from "@/components/date-range-picker";
+import { get } from "http";
+import { useFakeDate } from "@/hooks/use-fake-date";
 
 type PropsType = {
   data: DataProps;

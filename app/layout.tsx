@@ -1,19 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
+
+import NextTopLoader from "nextjs-toploader";
 
 import "@/styles/satoshi.css";
 import "@/styles/style.css";
 
 import { Providers } from "@/app/provider";
 
-import { Header } from "@/components/header";
-import { Sidebar } from "@/components/sidebar";
 import { COLORS } from "@/utils/color";
 
 import { themeType } from "@/types/types";
+
+import { Header } from "@/components/header";
+import { Sidebar } from "@/components/sidebar";
 
 export default function RootLayout({ children }: PropsWithChildren) {
   const [theme, setTheme] = useState<themeType>("light");

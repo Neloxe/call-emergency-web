@@ -1,11 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
+import { usePopup } from "@/context/popup-context";
+
 import { Button } from "@/components/button";
 import { Text } from "@/components/text";
-import { useState } from "react";
-import { MessageToast } from "@/components/messageToast";
-import { useEffect } from "react";
-import { usePopup } from "@/context/popupContext";
+import { MessageToast } from "@/components/message-toast";
 
 export default function DeletePage() {
   useEffect(() => {

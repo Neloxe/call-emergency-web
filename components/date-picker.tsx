@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import { French } from "flatpickr/dist/l10n/fr.js";
+
 import { Calendar } from "@/assets/icons";
+
 import Hook = flatpickr.Options.Hook;
 import DateOption = flatpickr.Options.DateOption;
 

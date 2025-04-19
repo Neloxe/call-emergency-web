@@ -1,14 +1,18 @@
 "use client";
 
-import { ChevronUpIcon } from "@/assets/icons";
-import { cn } from "@/utils/utils";
 import { useState } from "react";
+
+import { cn } from "@/utils/utils";
+
+import { useModel } from "@/context/model-context";
+
+import { ChevronUpIcon } from "@/assets/icons";
+
 import {
   Dropdown,
   DropdownContent,
   DropdownTrigger,
 } from "@/components/dropdown";
-import { useModel } from "../context/model-context";
 
 type SelectModelProps = {
   items?: string[];

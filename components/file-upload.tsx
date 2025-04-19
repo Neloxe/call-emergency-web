@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
-import { validateFile } from "@/services/fileService";
-import MessageToast from "./messageToast";
+
+import { validateFile } from "@/services/file-service";
+
+import MessageToast from "@/components/message-toast";
 
 export const FileUpload = () => {
   const [file, setFile] = useState<File | null>(null);

@@ -1,8 +1,10 @@
 "use client";
 
-import { Text } from "@/components/text";
-import { EmailIcon } from "@/assets/icons";
 import { useEffect } from "react";
+
+import { EmailIcon } from "@/assets/icons";
+
+import { Text } from "@/components/text";
 
 export default function InfoPage() {
   useEffect(() => {

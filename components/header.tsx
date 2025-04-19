@@ -1,10 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useSidebarContext } from "@/context/sidebar-context";
-import { ThemeToggleSwitch } from "@/components/theme-toggle";
-import { SelectModel } from "./select-model";
+
 import { MenuIcon } from "@/assets/icons";
+
+import { useSidebarContext } from "@/context/sidebar-context";
+
+import { ThemeToggleSwitch } from "@/components/theme-toggle";
+import { SelectModel } from "@/components/select-model";
 
 export function Header() {
   const { toggleSidebar } = useSidebarContext();

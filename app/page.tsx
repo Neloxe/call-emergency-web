@@ -1,15 +1,18 @@
 "use client";
 
-import { MessageError } from "@/components/messageError";
-import { MessageLoading } from "@/components/messageLoading";
-import { useModel } from "@/context/model-context";
-import { PredictionsOverview } from "@/components/predictionsOverview";
-import { Statistics } from "@/components/statistic";
-import { DataProps } from "@/types/types";
-import { getData } from "@/utils/get-data";
 import { useEffect, useState } from "react";
-import { Forecast } from "@/components/forecast";
+
+import { getData } from "@/utils/get-data";
+
+import { DataProps } from "@/types/types";
+import { useModel } from "@/context/model-context";
+
 import { Clock } from "@/components/clock";
+import { PredictionsOverview } from "@/components/predictions-overview";
+import { Statistics } from "@/components/statistic";
+import { Forecast } from "@/components/forecast";
+import { MessageError } from "@/components/message-error";
+import { MessageLoading } from "@/components/message-loading";
 
 export default function Home() {
   useEffect(() => {

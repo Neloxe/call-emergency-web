@@ -1,9 +1,12 @@
 import { cn } from "@/utils/utils";
-import { PredictionsOverviewChart } from "@/components/predictionsOverviewChart";
-import { DataProps } from "@/types/types";
-import DatePicker from "./datePicker";
+
 import React, { useState } from "react";
-import MessageToast from "@/components/messageToast";
+
+import { DataProps } from "@/types/types";
+
+import DatePicker from "@/components/date-picker";
+import MessageToast from "@/components/message-toast";
+import { PredictionsOverviewChart } from "@/components/predictions-overview-chart";
 
 type PropsType = {
   data: DataProps;

@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import Badge from "@/components/badge";
+import React, { useEffect, useState } from "react";
+
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -9,9 +9,12 @@ import {
   CheckIcon,
   XIcon,
 } from "@/assets/icons";
+
 import { cn } from "@/utils/utils";
+
 import { DataProps } from "@/types/types";
-import { useEffect, useState } from "react";
+
+import Badge from "@/components/badge";
 
 type BadgeColor =
   | "primary"

@@ -1,5 +1,6 @@
-import { cn } from "@/utils/utils";
 import { useEffect, useState } from "react";
+
+import { cn } from "@/utils/utils";
 
 export type PropsType = {
   className?: string;

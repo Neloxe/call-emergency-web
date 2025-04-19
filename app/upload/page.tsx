@@ -1,6 +1,6 @@
 "use client";
 
-import { FileUpload } from "@/components/fileUpload";
+import { FileUpload } from "@/components/file-upload";
 import { useEffect } from "react";
 
 export default function AddPage() {

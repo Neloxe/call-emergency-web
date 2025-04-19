@@ -4,9 +4,9 @@ import React, { useState } from "react";
 
 import { DataProps } from "@/types/types";
 
-import DatePicker from "@/components/date-picker";
 import MessageToast from "@/components/message-toast";
 import { PredictionsOverviewChart } from "@/components/predictions-overview-chart";
+import { DateRangePicker } from "@/components/date-range-picker";
 
 type PropsType = {
   data: DataProps;
@@ -77,46 +77,13 @@ export function PredictionsOverview({
             {title}
           </h2>
           {addDateRange && (
-            <div className="mr-10 flex gap-4">
-              <DatePicker
-                id="date-picker-start"
-                placeholder="Date de début"
-                onChange={(_, currentDateString) => {
-                  if (currentDateString) {
-                    if (
-                      dateRange[1] &&
-                      new Date(currentDateString) > new Date(dateRange[1])
-                    ) {
-                      setToastMessage(
-                        "La date de début ne peut pas être supérieure à la date de fin.",
-                      );
-                      setToastType("error");
-                    } else {
-                      setDateRange([currentDateString, dateRange[1]]);
-                    }
-                  }
-                }}
-              />
-              <DatePicker
-                id="date-picker-end"
-                placeholder="Date de fin"
-                onChange={(_, currentDateString) => {
-                  if (currentDateString) {
-                    if (
-                      dateRange[0] &&
-                      new Date(currentDateString) < new Date(dateRange[0])
-                    ) {
-                      setToastMessage(
-                        "La date de fin ne peut pas être inférieure à la date de début.",
-                      );
-                      setToastType("error");
-                    } else {
-                      setDateRange([dateRange[0], currentDateString]);
-                    }
-                  }
-                }}
-              />
-            </div>
+            <DateRangePicker
+              startId="date-picker-start-overview"
+              endId="date-picker-end-overview"
+              onDateRangeChange={handleDateRangeChange}
+              className="mr-10"
+              maxDate={maxDate}
+            />
           )}
         </div>
         {filteredData.predictions.length === 0 &&

@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 import { ChevronUpIcon } from "@/assets/icons";
 
 import { cn } from "@/utils/utils";
+
+import { useFakeDate } from "@/hooks/use-fake-date";
+
 import {
   Dropdown,
   DropdownContent,
   DropdownTrigger,
 } from "@/components/dropdown";
-
 import MessageToast from "@/components/message-toast";
-import DatePicker from "@/components/date-picker";
+import { DateRangePicker } from "@/components/date-range-picker";
 
 type Props = {
   data: {
@@ -45,6 +47,15 @@ export function Forecast({ data, className }: Props) {
     null,
     null,
   ]);
+
+  const handleDateRangeChange = (range: [string | null, string | null]) => {
+    setDateRange(range);
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [groupTime, setGroupTime] = useState("1h");
+  const items = ["1h", "2h", "4h", "6h", "8h", "12h", "24h"];
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<
@@ -151,46 +162,13 @@ export function Forecast({ data, className }: Props) {
             Prédictions
           </h2>
           <div className="ml-auto flex items-center">
-            <div className="flex items-center gap-4">
-              <DatePicker
-                id="date-picker-start-forecast"
-                placeholder="Date de début"
-                onChange={(_, currentDateString) => {
-                  if (currentDateString) {
-                    if (
-                      dateRange[1] &&
-                      new Date(currentDateString) > new Date(dateRange[1])
-                    ) {
-                      setToastMessage(
-                        "La date de début ne peut pas être supérieure à la date de fin.",
-                      );
-                      setToastType("error");
-                    } else {
-                      setDateRange([currentDateString, dateRange[1]]);
-                    }
-                  }
-                }}
-              />
-              <DatePicker
-                id="date-picker-end-forecast"
-                placeholder="Date de fin"
-                onChange={(_, currentDateString) => {
-                  if (currentDateString) {
-                    if (
-                      dateRange[0] &&
-                      new Date(currentDateString) < new Date(dateRange[0])
-                    ) {
-                      setToastMessage(
-                        "La date de fin ne peut pas être inférieure à la date de début.",
-                      );
-                      setToastType("error");
-                    } else {
-                      setDateRange([dateRange[0], currentDateString]);
-                    }
-                  }
-                }}
-              />
-            </div>
+            <DateRangePicker
+              startId="date-picker-start-forecast"
+              endId="date-picker-end-forecast"
+              onDateRangeChange={handleDateRangeChange}
+              className="ml-auto"
+              maxDate={maxDate}
+            />
             <div className="flex items-center pl-10">
               <div className="pr-3">Grouper par :</div>
               <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>

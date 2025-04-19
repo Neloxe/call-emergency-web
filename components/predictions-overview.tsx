@@ -119,9 +119,8 @@ export function PredictionsOverview({
             </div>
           )}
         </div>
-        {!filteredData ||
-        !filteredData.predictions ||
-        filteredData.predictions.length === 0 ? (
+        {filteredData.predictions.length === 0 &&
+        filteredData.futures.length === 0 ? (
           <div className="mx-auto flex h-[250px] w-full items-center justify-center pt-10 text-gray-600 dark:text-gray-300">
             Aucun résultat disponible pour la plage de dates sélectionnée.
           </div>

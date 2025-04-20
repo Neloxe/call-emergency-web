@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
+import { useDatePickerContext } from "@/context/date-picker-context";
 import { XIcon } from "@/assets/icons";
-
 import DatePicker from "@/components/date-picker";
 import MessageToast from "@/components/message-toast";
 
@@ -30,6 +29,8 @@ export function DateRangePicker({
   const [toastType, setToastType] = useState<
     "success" | "error" | "info" | "warning"
   >("info");
+
+  const { setDatePickerOpen } = useDatePickerContext();
 
   const handleStartDateChange = (_: any, currentDateString: string | null) => {
     if (currentDateString) {
@@ -80,7 +81,11 @@ export function DateRangePicker({
   };
 
   return (
-    <div className={`flex gap-4 ${className}`}>
+    <div
+      className={`flex gap-4 ${className}`}
+      onMouseEnter={() => setDatePickerOpen(true)}
+      onMouseLeave={() => setDatePickerOpen(false)}
+    >
       {toastMessage && (
         <MessageToast
           message={toastMessage}

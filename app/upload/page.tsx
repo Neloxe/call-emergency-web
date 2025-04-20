@@ -8,5 +8,9 @@ export default function AddPage() {
   useEffect(() => {
     document.title = "Merlain - Ajouts";
   }, []);
-  return <Dropzone />;
+  return (
+    <div className="z-0">
+      <Dropzone />;
+    </div>
+  );
 }

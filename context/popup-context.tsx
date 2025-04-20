@@ -9,17 +9,25 @@ type PopupContextType = {
 const PopupContext = createContext<PopupContextType | undefined>(undefined);
 
 export const PopupProvider = ({ children }: { children: ReactNode }) => {
+  console.log("PopupProvider rendered");
   const [popupContent, setPopupContent] = useState<ReactNode | null>(null);
 
-  const showPopup = (content: ReactNode) => setPopupContent(content);
+  const showPopup = (content: ReactNode) => {
+    console.log("OK");
+    setPopupContent(content);
+  };
   const hidePopup = () => setPopupContent(null);
 
   return (
     <PopupContext.Provider value={{ showPopup, hidePopup, popupContent }}>
       {children}
       {popupContent && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50">
-          <div className="rounded-[10px] border bg-white p-6 shadow-lg">
+        <div
+          id="popup"
+          className="fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="rounded-[10px] border bg-white p-4">
             {popupContent}
           </div>
         </div>

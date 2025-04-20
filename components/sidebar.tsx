@@ -96,7 +96,7 @@ export function Sidebar() {
   }, [pathname]);
 
   return (
-    <>
+    <div className="z-10">
       <aside
         className={cn(
           "max-w-[290px] overflow-hidden border-r border-gray-200 bg-white transition-[width] duration-200 ease-linear dark:border-gray-800 dark:bg-gray-dark",
@@ -205,6 +205,6 @@ export function Sidebar() {
           </div>
         </div>
       </aside>
-    </>
+    </div>
   );
 }

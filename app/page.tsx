@@ -63,7 +63,7 @@ export default function Home() {
   }
 
   return (
-    <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
+    <div className="z-0 mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
       <Clock className="xl:col-span- col-span-12" />
       {data_month && (
         <>

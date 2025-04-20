@@ -24,11 +24,17 @@ export default function DeletePage() {
       <>
         <p>Êtes-vous sûr de vouloir supprimer les données ?</p>
         <div className="mt-4 flex justify-center gap-4">
-          <Button label="Confirmer" variant="delete" onClick={handleConfirm} />
+          <Button
+            label="Confirmer"
+            variant="delete"
+            onClick={handleConfirm}
+            shape={"rounded"}
+          />
           <Button
             label="Annuler"
             variant="cancel"
             onClick={() => hidePopup()}
+            shape={"rounded"}
           />
         </div>
       </>,
@@ -58,7 +64,7 @@ export default function DeletePage() {
   };
 
   return (
-    <>
+    <div className="z-0">
       {toastMessage && (
         <MessageToast
           message={toastMessage}
@@ -89,6 +95,6 @@ export default function DeletePage() {
           </div>
         }
       />
-    </>
+    </div>
   );
 }

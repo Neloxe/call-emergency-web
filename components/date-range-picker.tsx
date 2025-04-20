@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { XIcon } from "@/assets/icons";
+
 import DatePicker from "@/components/date-picker";
 import MessageToast from "@/components/message-toast";
 
@@ -71,6 +73,12 @@ export function DateRangePicker({
     }
   };
 
+  const clearDates = () => {
+    const newRange: [string | null, string | null] = [null, null];
+    setDateRange(newRange);
+    onDateRangeChange(newRange);
+  };
+
   return (
     <div className={`flex gap-4 ${className}`}>
       {toastMessage && (
@@ -83,20 +91,36 @@ export function DateRangePicker({
           }}
         />
       )}
-      <DatePicker
-        id={startId}
-        placeholder="Date de début"
-        minDate={minDate}
-        maxDate={dateRange[1] || maxDate}
-        onChange={handleStartDateChange}
-      />
-      <DatePicker
-        id={endId}
-        placeholder="Date de fin"
-        minDate={dateRange[0] || minDate}
-        maxDate={maxDate}
-        onChange={handleEndDateChange}
-      />
+      <div className="flex items-center gap-2">
+        <DatePicker
+          id={startId}
+          placeholder="Date de début"
+          minDate={minDate}
+          maxDate={dateRange[1] || maxDate}
+          value={dateRange[0]}
+          onChange={handleStartDateChange}
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <DatePicker
+          id={endId}
+          placeholder="Date de fin"
+          minDate={dateRange[0] || minDate}
+          maxDate={maxDate}
+          value={dateRange[1]}
+          onChange={handleEndDateChange}
+        />
+      </div>
+
+      <button
+        type="button"
+        onClick={clearDates}
+        className="flex items-center gap-1 self-start hover:underline"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800">
+          <XIcon className="text-gray-800 dark:text-white/90" />
+        </div>
+      </button>
     </div>
   );
 }

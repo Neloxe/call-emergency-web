@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { ChevronUpIcon } from "@/assets/icons";
 
@@ -13,6 +13,8 @@ import {
 } from "@/components/dropdown";
 import MessageToast from "@/components/message-toast";
 import { DateRangePicker } from "@/components/date-range-picker";
+import { ForecastValues } from "./forecast-values";
+import { filterDataByDateRange } from "@/utils/filter-data";
 
 type Props = {
   data: {
@@ -44,27 +46,11 @@ export function Forecast({ data, className }: Props) {
     "success" | "error" | "info" | "warning"
   >("info");
 
-  const filteredData = data.filter((item) => {
-    const itemDate = new Date(item.date);
-
-    if (dateRange[0] && dateRange[1]) {
-      const startDate = new Date(dateRange[0]);
-      const endDate = new Date(dateRange[1]);
-      return itemDate >= startDate && itemDate <= endDate;
-    }
-
-    if (dateRange[0]) {
-      const startDate = new Date(dateRange[0]);
-      return itemDate >= startDate;
-    }
-
-    if (dateRange[1]) {
-      const endDate = new Date(dateRange[1]);
-      return itemDate <= endDate;
-    }
-
-    return true;
-  });
+  const filteredData = filterDataByDateRange(
+    { predictions: data, reals: [], futures: [] },
+    dateRange[0],
+    dateRange[1],
+  ).predictions;
 
   const groupedData = filteredData.reduce(
     (acc, curr) => {
@@ -199,45 +185,7 @@ export function Forecast({ data, className }: Props) {
             style={{ height: 300 }}
             className="w-full overflow-x-auto overflow-y-auto"
           >
-            {groupedDataArray.length === 0 ? (
-              <div className="mx-auto flex h-[250px] w-full items-center justify-center pt-10 text-gray-600 dark:text-gray-300">
-                Aucun résultat disponible pour la plage de dates sélectionnée.
-              </div>
-            ) : (
-              <div className="flex h-full w-full">
-                {columns.map((col, colIdx) => (
-                  <div
-                    key={colIdx}
-                    className={cn(
-                      "flex flex-1 flex-col",
-                      colIdx !== 0 && "border-l border-black dark:border-white",
-                    )}
-                    style={{ minWidth: 160 }}
-                  >
-                    {col.map((group, rowIdx) => (
-                      <div
-                        key={rowIdx}
-                        className="px-2 py-3"
-                        style={{ minHeight: "50px" }}
-                      >
-                        <span className="text-sm text-gray-600 dark:text-gray-300">
-                          {new Date(group.date).toLocaleDateString("fr-FR", {
-                            year: "2-digit",
-                            day: "2-digit",
-                            month: "2-digit",
-                            hour: "2-digit",
-                          })}{" "}
-                          :
-                        </span>
-                        <span className="ml-4 font-medium text-dark dark:text-white">
-                          {Math.ceil(group.value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            )}
+            <ForecastValues data={columns} />
           </div>
         </div>
       </div>

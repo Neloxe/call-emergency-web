@@ -13,6 +13,7 @@ type PropsType = {
   mode?: "single" | "multiple" | "range" | "time";
   onChange?: Hook | Hook[];
   defaultDate?: DateOption;
+  value?: string | null;
   label?: string;
   placeholder?: string;
   minDate?: DateOption;
@@ -24,6 +25,7 @@ export default function DatePicker({
   mode,
   onChange,
   defaultDate,
+  value,
   placeholder,
   minDate,
   maxDate,
@@ -36,7 +38,7 @@ export default function DatePicker({
       dateFormat: "Y-m-d H:i",
       enableTime: true,
       time_24hr: true,
-      defaultDate,
+      defaultDate: value || defaultDate,
       onChange,
       locale: French,
       minDate,
@@ -48,7 +50,7 @@ export default function DatePicker({
         flatPickr.destroy();
       }
     };
-  }, [mode, onChange, id, defaultDate, minDate, maxDate]);
+  }, [mode, onChange, id, value, defaultDate, minDate, maxDate]);
 
   return (
     <div>
@@ -56,6 +58,8 @@ export default function DatePicker({
         <input
           id={id}
           placeholder={placeholder}
+          value={value || ""}
+          readOnly
           className="shadow-theme-xs focus:outline-hidden focus:ring-3 focus:border-brand-300 focus:ring-brand-500/20 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">

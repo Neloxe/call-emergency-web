@@ -1,22 +1,23 @@
-export async function getData(
-  n_days: number,
-  selectedModel: string,
-): Promise<{ predictions: number[]; reals: number[] }> {
+import { DataProps } from "@/types/types";
 
+export async function getData(
+  n_days: number | null,
+  selectedModel: string,
+): Promise<DataProps> {
   let name_model;
   if (selectedModel === "Merlain-Week") {
     name_model = "week";
   } else if (selectedModel === "Merlain-2-Weeks") {
-    name_model = "two_weeks";
+    name_model = "two-weeks";
   } else if (selectedModel === "Merlain-Month") {
     name_model = "month";
   } else {
     throw new Error("Invalid model selected");
   }
 
-  const url = `http://localhost:3000/api?selectedModel=${encodeURIComponent(name_model)}&n_days=${n_days}`;
-  
-  console.log("Fetching data from URL:", url);
+  const url = `http://localhost:3000/api?selectedModel=${encodeURIComponent(name_model)}${
+    n_days !== null ? `&n_days=${n_days}` : ""
+  }`;
 
   const response = await fetch(url);
 
@@ -25,8 +26,6 @@ export async function getData(
     console.error(`Failed to fetch data: ${response.status} - ${errorText}`);
     throw new Error(`Failed to fetch data: ${response.statusText}`);
   }
-
-  console.log("Response status:", response.status);
 
   return response.json();
 }

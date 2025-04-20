@@ -1,25 +1,27 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useSidebarContext } from "@/components/sidebar-context";
-import { ThemeToggleSwitch } from "@/components/theme-toggle";
-import { SelectModel } from "./select-model";
+
 import { MenuIcon } from "@/assets/icons";
+
+import { useSidebarContext } from "@/context/sidebar-context";
+
+import { ThemeToggleSwitch } from "@/components/theme-toggle";
+import { SelectModel } from "@/components/select-model";
 
 export function Header() {
   const { toggleSidebar } = useSidebarContext();
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-5 shadow-1 dark:bg-gray-dark md:px-5 2xl:px-10">
-      {/* Provoque un problème avec les graphes */}
-      {/* <button
+    <header className="sticky top-0 z-10 flex items-center justify-between bg-white px-4 py-5 shadow-1 dark:bg-gray-dark md:px-5 2xl:px-10">
+      <button
         onClick={toggleSidebar}
-        className="rounded-lg border px-1.5 py-1 dark:border-stroke-dark dark:bg-[#020D1A] hover:dark:bg-[#FFFFFF1A] mr-10"
+        className="mr-10 rounded-lg border px-1.5 py-1 dark:border-stroke-dark dark:bg-[#020D1A] hover:dark:bg-[#FFFFFF1A]"
       >
         <MenuIcon />
         <span className="sr-only">Toggle Sidebar</span>
-      </button> */}
+      </button>
       <div className="max-xl:hidden">
         <h1 className="mb-0.5 text-heading-5 font-bold text-dark dark:text-white">
           Merlain 3000

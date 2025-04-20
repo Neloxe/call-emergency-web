@@ -1,41 +1,45 @@
-import type { Metadata } from "next";
-import NextTopLoader from "nextjs-toploader";
+"use client";
+
+import { useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
+
+import NextTopLoader from "nextjs-toploader";
 
 import "@/styles/satoshi.css";
 import "@/styles/style.css";
 
 import { Providers } from "@/app/provider";
 
+import { COLORS } from "@/utils/color";
+
+import { themeType } from "@/types/types";
+
 import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 
-export const metadata: Metadata = {
-  title: {
-    template: "Merlain - %s",
-    default: "Merlain",
-  },
-  description:
-    "Prédiction du nombre d'appel pour le Centre de Réception et de Régulation des Appels.",
-};
 export default function RootLayout({ children }: PropsWithChildren) {
-  const theme =
-    typeof window !== "undefined"
-      ? localStorage.getItem("theme") || "light"
-      : "light";
+  const [theme, setTheme] = useState<themeType>("light");
+
+  useEffect(() => {
+    const storedTheme = (localStorage.getItem("theme") as themeType) || "light";
+    setTheme(storedTheme);
+  }, []);
+
+  if (theme === null) {
+    <div className="flex min-h-screen items-center justify-center bg-gray-2 text-gray-800 dark:bg-[#020d1a] dark:text-gray-200">
+      Chargement...
+    </div>;
+  }
 
   return (
     <html lang="en" className={theme} style={{ colorScheme: theme }}>
       <body>
         <Providers>
-          <NextTopLoader color="#5750F1" showSpinner={false} />
-
+          <NextTopLoader color={COLORS.BLUE} showSpinner={false} />
           <div className="flex min-h-screen">
             <Sidebar />
-
-            <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
+            <div className="min-h-screen w-full bg-gray-2 dark:bg-[#020d1a]">
               <Header />
-
               <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
                 {children}
               </main>

@@ -1,75 +1,108 @@
-import { NextResponse } from "next/server";
+import { parse } from "csv-parse/sync";
 import fs from "fs";
-import csvParser from "csv-parser";
+import { NextResponse } from "next/server";
+import path from "path";
 
-export async function GET(req: Request) {
-  // try {
-  //   const fakeData = {
-  //     predictions: Array(24).fill(0).map(() => Math.random() * 100),
-  //     reals: Array(24).fill(0).map(() => Math.random() * 100),
-  //   };
-
-  //   return NextResponse.json(fakeData);
-  // } catch (error) {
-  //   console.error("Unexpected error in API route:", error);
-  //   return NextResponse.json(
-  //     { error: "Internal Server Error" },
-  //     { status: 500 }
-  //   );
-  // }
-
+export async function GET(request: Request) {
   try {
-    const predictions: number[][] = [];
-    const reals: number[][] = [];
+    const { searchParams } = new URL(request.url);
+    const selectedModel = searchParams.get("selectedModel");
+    const nDaysParam = searchParams.get("n_days");
+    const nDays = nDaysParam ? Math.max(0, parseInt(nDaysParam, 10)) : null;
 
-    const filePaths = [
-      { path: `./data/pred_week.csv`, target: predictions },
-      { path: `./data/pred_week.csv`, target: reals },
-    ];
+    if (!selectedModel) {
+      return NextResponse.json(
+        { error: "Le paramètre 'selectedModel' est requis." },
+        { status: 400 },
+      );
+    }
 
-    // const filePaths = [
-    //   { path: `./src/data/predictions.csv`, target: predictions },
-    //   { path: `./src/data/reals.csv`, target: reals },
-    // ];
-
-    await Promise.all(
-      filePaths.map(({ path, target }) => {
-        return new Promise<void>((resolve, reject) => {
-          let isFirstRow = true;
-
-          fs.createReadStream(path)
-            .pipe(csvParser({ headers: false }))
-            .on("data", (row) => {
-              if (isFirstRow) {
-                isFirstRow = false;
-                return;
-              }
-              const values = Object.values(row).map((value) => Number(value));
-              target.push(values);
-            })
-            .on("end", resolve)
-            .on("error", (err) => {
-              console.error(`Error reading file ${path}:`, err);
-              reject(err);
-            });
-        });
-      })
+    const predPath = path.join(
+      process.cwd(),
+      "data",
+      `pred-${selectedModel}.csv`,
+    );
+    const realPath = path.join(
+      process.cwd(),
+      "data",
+      `test-${selectedModel}.csv`,
+    );
+    const futuresPath = path.join(
+      process.cwd(),
+      "data",
+      `futures-${selectedModel}.csv`,
     );
 
-    const flatPredictions = predictions.flat();
-    const flatReals = reals.flat();
+    if (!fs.existsSync(predPath)) {
+      return NextResponse.json(
+        { error: `Le fichier prédictions est introuvable : ${predPath}` },
+        { status: 404 },
+      );
+    }
 
-    const fakeData = {
-      predictions: flatPredictions,
-      reals: flatReals,
-    };
+    if (!fs.existsSync(realPath)) {
+      return NextResponse.json(
+        { error: `Le fichier réel est introuvable : ${realPath}` },
+        { status: 404 },
+      );
+    }
 
-    return NextResponse.json(fakeData);
+    if (!fs.existsSync(futuresPath)) {
+      return NextResponse.json(
+        { error: `Le fichier futur est introuvable : ${futuresPath}` },
+        { status: 404 },
+      );
+    }
+
+    const predContent = fs.readFileSync(predPath, "utf-8");
+    const realContent = fs.readFileSync(realPath, "utf-8");
+    const futuresContent = fs.readFileSync(futuresPath, "utf-8");
+
+    const predRecords = parse(predContent, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
+    const realRecords = parse(realContent, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
+    const futuresRecords = parse(futuresContent, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
+    const maxPredDays = predRecords.length;
+    const maxRealDays = realRecords.length;
+
+    const validNDays = nDays !== null ? Math.min(nDays, maxPredDays, maxRealDays) : Math.min(maxPredDays, maxRealDays);
+
+    const predictions = predRecords
+      .slice(-validNDays * 24)
+      .map((record: any) => ({
+        date: record.Date,
+        value: Number(record.Predictions),
+      }));
+
+    const reals = realRecords.slice(-validNDays * 24).map((record: any) => ({
+      date: record.Date,
+      value: Number(record.Predictions),
+    }));
+
+    const futures = futuresRecords
+      .slice(0, validNDays * 24)
+      .map((record: any) => ({
+        date: record.Date,
+        value: Number(record.Predictions),
+      }));
+
+    return NextResponse.json({ predictions, reals, futures });
   } catch (error) {
-    console.error("Unexpected error in API route:", error);
+    console.error("Erreur lors de la lecture des fichiers CSV :", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: "Impossible de lire les fichiers CSV." },
+      { status: 500 },
     );
   }
 }

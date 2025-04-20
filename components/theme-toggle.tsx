@@ -1,6 +1,9 @@
-import { cn } from "@/utils/utils";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+
+import { useTheme } from "next-themes";
+
+import { cn } from "@/utils/utils";
+
 import { Sun, Moon } from "@/assets/icons";
 
 const THEMES = [
@@ -44,7 +47,7 @@ export function ThemeToggleSwitch() {
             key={name}
             className={cn(
               "relative grid size-[38px] place-items-center rounded-full",
-              name === "dark" && "dark:text-white"
+              name === "dark" && "dark:text-white",
             )}
           >
             <Icon />

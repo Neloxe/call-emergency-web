@@ -9,10 +9,10 @@ export function MessageError({ className, message }: PropsType) {
   return (
     <div
       className={cn(
-        "h-full w-full rounded-[10px] bg-red-100 px-7.5 pt-7.5 pb-5 shadow-1 dark:bg-red-900 dark:shadow-card",
-        className
+        "w-full rounded-[10px] bg-red-100 px-7.5 pb-5 pt-7.5 shadow-1 dark:bg-red-900 dark:shadow-card",
+        className,
       )}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%" }}
     >
       <div className="flex flex-wrap items-center">
         <h2 className="text-body-2xlg font-bold text-red-700 dark:text-red-300">

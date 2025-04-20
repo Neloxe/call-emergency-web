@@ -12,7 +12,7 @@ export const NAV_DATA = [
       },
       {
         title: "Ajouts",
-        url: "/add",
+        url: "/upload",
         icon: DownloadIcon,
         items: [],
       },

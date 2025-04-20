@@ -1,6 +1,5 @@
-import type { SVGProps } from "react";
-
-type SVGPropsType = SVGProps<SVGSVGElement>;
+import { SVGProps } from "react";
+import { SVGPropsType } from "@/types/types";
 
 export function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
   return (

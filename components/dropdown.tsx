@@ -1,8 +1,5 @@
 "use client";
 
-import { useClickOutside } from "@/hooks/use-click-outside";
-import { cn } from "@/utils/utils";
-import { SetStateActionType } from "@/types/set-state-action-type";
 import {
   createContext,
   type PropsWithChildren,
@@ -10,6 +7,12 @@ import {
   useEffect,
   useRef,
 } from "react";
+
+import { useClickOutside } from "@/hooks/use-click-outside";
+
+import { cn } from "@/utils/utils";
+
+import { SetStateActionType } from "@/types/types";
 
 type DropdownContextType = {
   isOpen: boolean;
@@ -98,13 +101,13 @@ export function DropdownContent({
       role="menu"
       aria-orientation="vertical"
       className={cn(
-        "fade-in-0 zoom-in-95 pointer-events-auto absolute z-99 mt-2 min-w-[8rem] origin-top-right rounded-lg",
+        "fade-in-0 zoom-in-95 z-90 pointer-events-auto absolute mt-2 min-w-[8rem] origin-top-right rounded-lg",
         {
           "animate-in right-0": align === "end",
           "left-0": align === "start",
           "left-1/2 -translate-x-1/2": align === "center",
         },
-        className
+        className,
       )}
     >
       {children}

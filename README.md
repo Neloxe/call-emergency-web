@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Interface du modèle prédictif pour le Centre de Réception et de Régulation des Appels des Bouches-du-Rhône
 
-## Getting Started
+## Installation et lancement
 
-First, run the development server:
+1. Créez un environnement virtuel :
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```sh
+   python -m venv .venv
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Activez l'environnement virtuel :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```sh
+   source .venv/bin/activate
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Installez les dépendances Python et NPM:
 
-## Learn More
+   ```sh
+   pip install -r requirements.txt
+   npm i
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Lancement du projet
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```sh
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Introduction
 
-## Deploy on Vercel
+La régulation médicale est un dispositif téléphonique du Service d’Aide Médicale Urgente (SAMU) qui joue un rôle clé dans la gestion des urgences et des flux de patients vers les établissements de santé. Au sein des Centres de réception et de régulation des appels (CRRA), elle met en place des stratégies adaptées face à des situations variées :
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Urgences vitales**
+- **Organisation de transports sanitaires urgents**
+- **Gestion des parcours de soins**
+- **Coordination en cas de situations sanitaires exceptionnelles**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Le dispositif, accessible gratuitement 24/7 via le **15** ou le **112**, s’appuie sur des moyens logistiques tels que :
+
+- Véhicules de secours et d’aide aux victimes (VSAV)
+- Structures mobiles d’urgence et de réanimation (SMUR)
+- Transports héliportés
+
+Elle interagit également avec d’autres services d’urgences comme les pompiers et les forces de l’ordre.
+
+---
+
+## 🚀 Objectifs de l'interface
+
+- **Visualisation des données** : Offrir une interface intuitive pour explorer les données historiques et prévisionnel des appels.
+- **Prédiction des flux d'appels** : Utiliser des modèles de machine learning (LSTM) pour anticiper le nombre d'appels au CRRA.
+
+---
+
+## 💡 Fonctionnalités
+
+- **Visualisation des données** : Graphiques interactifs pour explorer les tendances des appels.
+- **Ajouts des données réelles** : Intégrer des données en temps réel pour comparer avec les prédictions
+- **Suppression des données** : Supprimer des données
